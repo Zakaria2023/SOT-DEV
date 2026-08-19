@@ -115,14 +115,9 @@ export const SITE_DESCRIPTION =
   "SOT Dev is the software engineering studio inside Smart of Things - web platforms, mobile apps, ERP integrations and cloud infrastructure, built and operated in Saudi Arabia.";
 
 /**
- * SOT's real contact details, matching `apps/client/src/lib/marketing.ts`.
- *
- * The studio deliberately does not invent a `dev@` address of its own. An
- * enquiry from this page lands in the same inbox and on the same switchboard as
- * one from sot.com.sa — a separate address would be a second thing to monitor
- * and the first place a lead would be lost.
+ * SOT Dev's dedicated sales contact address.
  */
-export const CONTACT_EMAIL = "info@sot.com.sa";
+export const CONTACT_EMAIL = "dev@sot.com.sa";
 
 /** The unified number, dialled as one string and shown grouped. */
 export const CONTACT_PHONE_UNIFIED = "920034599";
