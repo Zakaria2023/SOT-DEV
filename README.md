@@ -47,6 +47,23 @@ this page looks:
   dark-grey `smart of things`; on an ink band the wordmark half disappears, so
   the footer puts it on a white plate.
 
+## Type
+
+Three families, all self-hosted by `next/font` as variable fonts:
+
+- **Bricolage Grotesque** — headlines. A contemporary grotesque with an
+  optical-size axis, so the hero tightens up on its own at 60px rather than
+  sitting there at body-copy proportions blown up.
+- **Manrope** — reading copy. Open apertures, semi-geometric, warm enough to sit
+  beside the gold without arguing with it.
+- **JetBrains Mono** — the terminal and the tooling ticker.
+
+Components name `font-sot`, `font-sot-heading` and `font-sot-mono`, never a
+family directly, so the type can be changed in `app/globals.css` without
+touching a component. The parent site's Lato and Roboto were swapped out that
+way; continuity with sot.com.sa is carried by the mark and the gold, which are
+what a visitor actually recognises.
+
 ## Animation
 
 Motion is most of the point of this page, and almost none of it is JavaScript.

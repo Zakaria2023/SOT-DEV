@@ -13,6 +13,16 @@ export const formatCount = (value: number, decimals: number): string =>
     maximumFractionDigits: decimals,
   });
 
+/**
+ * A `tel:` href from a number written for reading.
+ *
+ * The spaces that make "+966 59 696 9601" legible are not valid in the URI, and
+ * a dialler handed them either fails or drops the call to the wrong number. The
+ * displayed string keeps its grouping; only the href is stripped.
+ */
+export const telHref = (phone: string): string =>
+  `tel:${phone.replace(/\s/g, "")}`;
+
 /** How many decimal places a target number is written with. */
 export const decimalPlaces = (value: number): number => {
   const [, fraction] = value.toString().split(".");

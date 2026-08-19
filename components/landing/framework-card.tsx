@@ -36,7 +36,7 @@ export const FrameworkCard = ({ framework }: Props) => {
         </div>
 
         <div>
-          <h3 className="font-sot-heading text-lg leading-tight text-sot-ink">
+          <h3 className="font-sot-heading text-lg leading-tight font-medium text-sot-ink">
             {framework.name}
           </h3>
           <p

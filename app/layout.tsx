@@ -2,31 +2,46 @@ import { SiteFooter } from "@/components/landing/site-footer";
 import { SiteHeader } from "@/components/landing/site-header";
 import { SITE_DESCRIPTION, SITE_NAME, SITE_TAGLINE } from "@/lib/landing";
 import { Metadata, Viewport } from "next";
-import { JetBrains_Mono, Lato, Roboto } from "next/font/google";
+import { Bricolage_Grotesque, JetBrains_Mono, Manrope } from "next/font/google";
 import "./globals.css";
 
-// Self-hosted at build time, so there is no request to fonts.googleapis.com and
-// no cross-origin chain standing in front of the first paint. The two brand
-// families are the public SOT site's, so a visitor crossing over from
-// sot.com.sa does not change typeface mid-journey. Only the weights actually
-// used are fetched — nothing here goes above medium.
-const lato = Lato({
+// ---- THE TYPE ----
+//
+// The parent site is set in Lato and Roboto. Both are competent and neither has
+// a point of view, which is survivable on a corporate brochure and fatal on the
+// front door of a studio whose whole claim is that it does the careful version.
+// The continuity with sot.com.sa is carried by the mark and by the gold, which
+// are the things a visitor actually recognises — not by the typeface.
+//
+// Bricolage Grotesque sets the headlines: a contemporary grotesque with an
+// optical-size axis, so the hero tightens up on its own at 60px instead of
+// sitting there at body-copy proportions blown up. Manrope carries the reading
+// copy — open apertures, semi-geometric, and warm enough to sit beside the gold
+// without arguing with it. JetBrains Mono stays on the terminal, because the
+// terminal is a real one and deserves a face built for code.
+//
+// All three are loaded as VARIABLE fonts — no `weight` array. One file per
+// family covers the whole range, which is fewer requests than the four static
+// instances it replaces, and it is what keeps Bricolage's optical sizing alive:
+// pin it to static weights and the axis is baked out. The house cap on weight
+// is a rule about which classes we write, not about which file we fetch.
+//
+// Self-hosted at build time either way, so there is no request to
+// fonts.googleapis.com and no cross-origin chain in front of the first paint.
+const bricolage = Bricolage_Grotesque({
   subsets: ["latin"],
-  weight: ["300", "400"],
-  variable: "--font-lato",
+  variable: "--font-bricolage",
   display: "swap",
 });
 
-const roboto = Roboto({
+const manrope = Manrope({
   subsets: ["latin"],
-  weight: ["400", "500"],
-  variable: "--font-roboto",
+  variable: "--font-manrope",
   display: "swap",
 });
 
 const jetBrainsMono = JetBrains_Mono({
   subsets: ["latin"],
-  weight: ["400", "500"],
   variable: "--font-jetbrains-mono",
   display: "swap",
 });
@@ -52,7 +67,7 @@ export const viewport: Viewport = {
 const RootLayout = ({ children }: LayoutProps<"/">) => (
   <html
     lang="en"
-    className={`${lato.variable} ${roboto.variable} ${jetBrainsMono.variable} h-full antialiased`}
+    className={`${manrope.variable} ${bricolage.variable} ${jetBrainsMono.variable} h-full antialiased`}
   >
     <body className="font-sot flex min-h-full flex-col">
       {/* Every scroll entrance on this page starts at `opacity: 0` and is

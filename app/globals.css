@@ -55,13 +55,15 @@
 
 @theme inline {
   /* next/font self-hosts these and puts the variables on <html> (see
-     app/layout.tsx). Lato for text and Roboto for headings are the public
-     site's two families; JetBrains Mono is this site's own, because half of
-     what it shows is code. */
-  --font-sot: var(--font-lato), sans-serif;
-  --font-sot-heading: var(--font-roboto), sans-serif;
+     app/layout.tsx, which carries the reasoning for the three families).
+     Components name `font-sot`, `font-sot-heading` and `font-sot-mono` rather
+     than the families directly, so the type can be changed here without a
+     single component being touched — which is exactly what happened when Lato
+     and Roboto were replaced. */
+  --font-sot: var(--font-manrope), sans-serif;
+  --font-sot-heading: var(--font-bricolage), sans-serif;
   --font-sot-mono: var(--font-jetbrains-mono), monospace;
-  --font-sans: var(--font-lato), sans-serif;
+  --font-sans: var(--font-manrope), sans-serif;
 }
 
 /* The list is rendered twice inside the track, so one loop is exactly half the

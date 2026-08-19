@@ -33,7 +33,7 @@ export const FaqAccordion = () => {
               aria-expanded={expanded}
               aria-controls={`faq-answer-${index}`}
               onClick={() => setOpenIndex(expanded ? null : index)}
-              className="font-sot-heading flex w-full items-center justify-between gap-6 py-6 text-left text-lg text-sot-ink transition-colors hover:text-sot-gold"
+              className="font-sot-heading flex w-full items-center justify-between gap-6 py-6 text-left text-lg font-medium text-sot-ink transition-colors hover:text-sot-gold"
             >
               {item.question}
               {/* One icon doing both jobs: a plus that turns forty-five degrees

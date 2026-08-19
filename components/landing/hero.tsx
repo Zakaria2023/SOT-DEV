@@ -1,7 +1,7 @@
 import { CodeWindow } from "@/components/landing/code-window";
 import { HeroLattice } from "@/components/landing/hero-lattice";
 import {
-  CONTACT_EMAIL,
+  CONTACT_WHATSAPP,
   HERO_HEADLINE,
   HERO_HEADLINE_ACCENT,
 } from "@/lib/landing";
@@ -33,7 +33,10 @@ export const Hero = () => (
           Booking new builds for this quarter
         </p>
 
-        <h1 className="font-sot-heading mt-7 text-4xl leading-none text-sot-ink sm:text-5xl lg:text-6xl">
+        {/* `tracking-tight` because Bricolage's optical-size axis tightens the
+            letterforms at display sizes but not the spacing between them; left
+            at normal, a 60px headline reads as though it were set for 16px. */}
+        <h1 className="font-sot-heading mt-7 text-4xl leading-none tracking-tight text-sot-ink sm:text-5xl lg:text-6xl">
           {HERO_HEADLINE.map((word, index) => (
             // The space between words is a real text node rather than a margin
             // on the span, so the headline still wraps where it wants to and
@@ -74,11 +77,14 @@ export const Hero = () => (
             animationDelay: `${(HERO_HEADLINE.length + 2) * WORD_STAGGER}ms`,
           }}
         >
-          {/* A mailto leaves the site, so it stays an anchor — `Link` is for
-              navigation within the app, and this page has nowhere to navigate
-              to. The same goes for the in-page jump beside it. */}
+          {/* WhatsApp, because that is where SOT's own consultation button
+              goes and where enquiries actually arrive. It leaves the site, so
+              it is an anchor rather than a `Link` — as is the in-page jump
+              beside it, which is a hash on this same document. */}
           <a
-            href={`mailto:${CONTACT_EMAIL}`}
+            href={CONTACT_WHATSAPP}
+            target="_blank"
+            rel="noreferrer"
             className="font-sot group inline-flex items-center gap-2 rounded-lg bg-sot-gold px-6 py-3.5 text-base text-white transition-colors hover:bg-sot-gold-dark"
           >
             Start a project

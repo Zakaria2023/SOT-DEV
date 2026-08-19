@@ -1,6 +1,11 @@
 import { Reveal } from "@/components/common/reveal";
-import { CONTACT_EMAIL } from "@/lib/landing";
-import { ArrowRight, Mail } from "lucide-react";
+import {
+  CONTACT_EMAIL,
+  CONTACT_PHONE_UNIFIED,
+  CONTACT_PHONE_UNIFIED_LABEL,
+  CONTACT_WHATSAPP,
+} from "@/lib/landing";
+import { ArrowRight, Mail, Phone } from "lucide-react";
 
 /**
  * The six flat squares drifting behind the closing band. Whole class names and
@@ -36,7 +41,7 @@ export const CtaBand = () => (
         Next step
       </p>
 
-      <h2 className="font-sot-heading mt-5 text-3xl leading-tight text-white sm:text-4xl lg:text-5xl">
+      <h2 className="font-sot-heading mt-5 text-3xl leading-tight tracking-tight text-white sm:text-4xl lg:text-5xl">
         Tell us what is not working,
         <span className="text-sot-gold"> and we will scope it.</span>
       </h2>
@@ -49,7 +54,9 @@ export const CtaBand = () => (
 
       <div className="mt-10 flex flex-wrap justify-center gap-3">
         <a
-          href={`mailto:${CONTACT_EMAIL}`}
+          href={CONTACT_WHATSAPP}
+          target="_blank"
+          rel="noreferrer"
           className="font-sot group inline-flex items-center gap-2 rounded-lg bg-sot-gold px-7 py-3.5 text-base text-white transition-colors hover:bg-sot-gold-dark"
         >
           Book a scoping call
@@ -64,6 +71,13 @@ export const CtaBand = () => (
         >
           <Mail size={17} />
           {CONTACT_EMAIL}
+        </a>
+        <a
+          href={`tel:${CONTACT_PHONE_UNIFIED}`}
+          className="font-sot inline-flex items-center gap-2 rounded-lg border border-sot-hairline-dark px-7 py-3.5 text-base text-white transition-colors hover:border-sot-gold hover:text-sot-gold"
+        >
+          <Phone size={17} />
+          {CONTACT_PHONE_UNIFIED_LABEL}
         </a>
       </div>
     </Reveal>

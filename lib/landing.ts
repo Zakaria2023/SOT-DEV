@@ -116,7 +116,42 @@ export const SITE_TAGLINE = "Software engineering at Smart of Things";
 export const SITE_DESCRIPTION =
   "SOT Dev is the software engineering studio inside Smart of Things - web platforms, mobile apps, ERP integrations and cloud infrastructure, built and operated in Saudi Arabia.";
 
-export const CONTACT_EMAIL = "dev@sot.com.sa";
+/**
+ * SOT's real contact details, matching `apps/client/src/lib/marketing.ts`.
+ *
+ * The studio deliberately does not invent a `dev@` address of its own. An
+ * enquiry from this page lands in the same inbox and on the same switchboard as
+ * one from sot.com.sa — a separate address would be a second thing to monitor
+ * and the first place a lead would be lost.
+ */
+export const CONTACT_EMAIL = "info@sot.com.sa";
+
+/** The unified number, dialled as one string and shown grouped. */
+export const CONTACT_PHONE_UNIFIED = "920034599";
+
+export const CONTACT_PHONE_UNIFIED_LABEL = "9200 34599";
+
+/** The three direct lines, exactly as the public site lists them. */
+export const CONTACT_PHONES: string[] = [
+  "+966 59 696 9601",
+  "+966 57 019 3833",
+  "+966 54 992 4779",
+];
+
+/**
+ * Where "Start a project" goes. WhatsApp rather than a form, because it is what
+ * the parent site's own consultation button does and it is how enquiries here
+ * actually arrive.
+ */
+export const CONTACT_WHATSAPP = `https://api.whatsapp.com/send?phone=966${CONTACT_PHONE_UNIFIED}`;
+
+/** The headquarters address, as the public site prints it. */
+export const CONTACT_ADDRESS: string[] = [
+  "Office No. 504, 5th Floor",
+  "Khalidiya Building, Wadi Al Shouara Street",
+  "Computer Market, Al Olaya District",
+  "Riyadh, Saudi Arabia",
+];
 
 /**
  * The headline, pre-split so each word can be handed its own entrance delay and

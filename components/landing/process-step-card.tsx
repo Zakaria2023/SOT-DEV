@@ -29,7 +29,7 @@ export const ProcessStepCard = ({ step, position }: Props) => {
         Step {position}
       </p>
 
-      <h3 className="font-sot-heading mt-2 text-xl text-sot-ink">
+      <h3 className="font-sot-heading mt-2 text-xl font-medium text-sot-ink">
         {step.title}
       </h3>
 

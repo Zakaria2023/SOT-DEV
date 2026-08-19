@@ -25,7 +25,7 @@ export const CapabilityCard = ({ capability }: Props) => {
         <Icon size={24} strokeWidth={1.6} />
       </div>
 
-      <h3 className="font-sot-heading mt-6 text-xl text-sot-ink">
+      <h3 className="font-sot-heading mt-6 text-xl font-medium text-sot-ink">
         {capability.title}
       </h3>
 

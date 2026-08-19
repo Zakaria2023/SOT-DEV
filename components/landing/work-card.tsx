@@ -24,7 +24,7 @@ export const WorkCard = ({ item }: Props) => (
       {item.sector}
     </p>
 
-    <h3 className="font-sot-heading mt-4 text-2xl leading-tight text-white">
+    <h3 className="font-sot-heading mt-4 text-2xl leading-tight font-medium tracking-tight text-white">
       {item.name}
     </h3>
 
@@ -35,7 +35,7 @@ export const WorkCard = ({ item }: Props) => (
     <div className="mt-8 flex gap-10">
       {item.metrics.map((metric) => (
         <div key={metric.label}>
-          <p className="font-sot-heading text-3xl leading-none text-white">
+          <p className="font-sot-heading text-3xl leading-none tracking-tight text-white">
             {metric.value}
           </p>
           <p className="font-sot mt-2 text-xs tracking-wide text-white/40">
