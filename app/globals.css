@@ -92,17 +92,21 @@
      single component being touched — which is exactly what happened when Lato
      and Roboto were replaced.
 
-     CAIRO SITS BEHIND THE LATIN FACES rather than replacing them on the Arabic
-     page. Neither Bricolage nor Manrope has a single Arabic glyph, so a browser
-     rendering Arabic walks the stack and reaches Cairo for exactly those
-     characters — while "Next.js" and "PostgreSQL", which appear on the Arabic
-     page too, still come out in the faces they were chosen for. One stack, no
-     per-language stylesheet, and on the English page Cairo is never fetched
-     because no glyph ever falls through to it. */
-  --font-sot: var(--font-manrope), var(--font-cairo), sans-serif;
-  --font-sot-heading: var(--font-bricolage), var(--font-cairo), sans-serif;
+     THE ARABIC FACES SIT BEHIND THE LATIN ONES rather than replacing them on
+     the Arabic page. Neither Bricolage nor Manrope has a single Arabic glyph,
+     so a browser rendering Arabic walks the stack and reaches Reem Kufi or IBM
+     Plex Sans Arabic for exactly those characters — while "Next.js" and
+     "PostgreSQL", which appear on the Arabic page too, still come out in the
+     faces they were chosen for.
+
+     One stack rather than a per-language stylesheet, and the pairing is
+     deliberate: Reem Kufi answers Bricolage on the headings, Plex Arabic
+     answers Manrope on the body. On the English page neither is fetched,
+     because no glyph ever falls through to them. */
+  --font-sot: var(--font-manrope), var(--font-plex-arabic), sans-serif;
+  --font-sot-heading: var(--font-bricolage), var(--font-reem-kufi), sans-serif;
   --font-sot-mono: var(--font-jetbrains-mono), monospace;
-  --font-sans: var(--font-manrope), var(--font-cairo), sans-serif;
+  --font-sans: var(--font-manrope), var(--font-plex-arabic), sans-serif;
 }
 
 /* The list is rendered twice inside the track, so one loop is exactly half the
@@ -295,6 +299,27 @@
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* ---- ARABIC NEEDS MORE ROOM BETWEEN LINES THAN LATIN ----
+
+   The headings are set `leading-none` and `leading-tight`, which is right for
+   Bricolage and wrong for any Arabic face: the script carries a tall alef above
+   the x-height and descenders well below the baseline, so a line box sized for
+   Latin clips both. Dotted letters lose their dots, which is not a cosmetic
+   problem — it changes which letter it is.
+
+   Scoped to `[dir="rtl"]` so the English page is untouched, and written here
+   rather than as an `rtl:leading-*` on each of seven headings, because it is one
+   fact about the script rather than seven decisions about components. The
+   attribute selector plus `:is()` outranks a single Tailwind class, which is
+   what lets it win. */
+[dir="rtl"] :is(h1, h2) {
+  line-height: 1.35;
+}
+
+[dir="rtl"] :is(h3, .font-sot-heading) {
+  line-height: 1.5;
 }
 
 html {

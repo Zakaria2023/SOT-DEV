@@ -20,9 +20,10 @@ import {
 import { Metadata, Viewport } from "next";
 import {
   Bricolage_Grotesque,
-  Cairo,
+  IBM_Plex_Sans_Arabic,
   JetBrains_Mono,
   Manrope,
+  Reem_Kufi,
 } from "next/font/google";
 import { notFound } from "next/navigation";
 import "../globals.css";
@@ -68,19 +69,41 @@ const jetBrainsMono = JetBrains_Mono({
   preload: false,
 });
 
-// ARABIC. Neither Bricolage nor Manrope has a single Arabic glyph, so without
-// this the Arabic page would be rendered entirely by whatever the operating
-// system happened to substitute — different on every device, and matched to
-// nothing.
+// ---- ARABIC GETS THE SAME ARCHITECTURE AS THE LATIN, NOT ONE GENERIC FAMILY ----
 //
-// Cairo sits BEHIND the Latin faces in the font stack rather than replacing
-// them (see `globals.css`), so it is reached only for glyphs the others do not
-// have — which is exactly the Arabic. It is deliberately not preloaded: on the
-// English page no Arabic glyph is ever rendered, so the file is never fetched.
-const cairo = Cairo({
-  subsets: ["arabic", "latin"],
-  weight: ["400", "500"],
-  variable: "--font-cairo",
+// Neither Bricolage nor Manrope has a single Arabic glyph, so without these the
+// Arabic page would be set by whatever the operating system happened to
+// substitute — different on every device, and matched to nothing.
+//
+// This was Cairo, which works and is the reason every second Arabic site looks
+// like every other one. So the Arabic side now mirrors the English: a display
+// face with character for the headings, and a workhorse for the reading copy.
+//
+// Reem Kufi is a contemporary geometric Kufi — recognisably Arabic without
+// being calligraphic or ornamental, and it holds its shape at 60px, which is
+// what a hero headline actually needs. IBM Plex Sans Arabic carries the body:
+// it is the Arabic member of one of the most carefully drawn type systems
+// around, and its register is precise and technical, which is the register this
+// studio is writing in.
+//
+// Both sit BEHIND the Latin faces in the stack rather than replacing them (see
+// `globals.css`), so they are reached only for glyphs the Latin faces lack —
+// which is exactly the Arabic — and "Next.js" on the Arabic page still comes
+// out in Bricolage. Neither is preloaded: on the English page no Arabic glyph
+// is ever rendered, so neither file is ever fetched.
+const reemKufi = Reem_Kufi({
+  subsets: ["arabic"],
+  variable: "--font-reem-kufi",
+  display: "swap",
+  preload: false,
+});
+
+// Not a variable font, and 400 is all the body needs — every `font-medium` on
+// this page sits on the HEADING face, which is Reem Kufi's job.
+const plexArabic = IBM_Plex_Sans_Arabic({
+  subsets: ["arabic"],
+  weight: ["400"],
+  variable: "--font-plex-arabic",
   display: "swap",
   preload: false,
 });
@@ -195,7 +218,7 @@ const RootLayout = async ({ children, params }: LayoutProps<"/[lang]">) => {
       // written with logical properties — `ms`/`me`, `ps`/`pe`, `start`/`end` —
       // so this one attribute flips the layout rather than a second stylesheet.
       dir={direction(lang)}
-      className={`${manrope.variable} ${bricolage.variable} ${jetBrainsMono.variable} ${cairo.variable} h-full antialiased`}
+      className={`${manrope.variable} ${bricolage.variable} ${jetBrainsMono.variable} ${reemKufi.variable} ${plexArabic.variable} h-full antialiased`}
     >
       <body className="font-sot flex min-h-full flex-col">
         {/* Every scroll entrance on this page starts at `opacity: 0` and is

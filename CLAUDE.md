@@ -49,9 +49,18 @@ here — they have nothing to govern.
   mirrors the page, and it can only mirror properties that are logical. The
   exceptions are elements already pinned to `dir="ltr"` (the terminal), where
   physical properties are correct.
-- Arabic type comes from Cairo, sitting _behind_ the Latin faces in the font
-  stack rather than replacing them, so Latin product names on the Arabic page
-  still render in the faces they were chosen for.
+- Arabic type is **Reem Kufi for headings and IBM Plex Sans Arabic for body** —
+  the same display-plus-workhorse split the Latin side uses, not one family
+  doing both. Both sit _behind_ the Latin faces in the stack rather than
+  replacing them, so Latin product names on the Arabic page still render in the
+  faces they were chosen for, and the English page never fetches either.
+- Arabic line-height is set once in `globals.css` under `[dir="rtl"]`, never as
+  an `rtl:leading-*` on individual headings. `leading-none` is right for
+  Bricolage and clips any Arabic face, and that is one fact about the script
+  rather than a decision to re-take on every heading.
+- Write numerals in the Arabic copy in **Western digits**, not Arabic-Indic. The
+  stat counters format through `Intl` in `en-US`, and prose using ٢٠ beside a
+  counter reading 20 is the same figure written two ways on one screen.
 
 ## Calls to Action
 
