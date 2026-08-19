@@ -18,6 +18,13 @@ type Props = {
 const SOLID_AFTER = 24;
 
 /**
+ * How far into the viewport a section's top has to have travelled before it
+ * counts as the one being read. Roughly the header's own height, so a section
+ * becomes "current" as it clears the bar rather than the instant it appears.
+ */
+const ACTIVE_LINE = 120;
+
+/**
  * The site header: a transparent bar over the hero that takes on a surface and
  * a hairline once the page has moved under it.
  *
@@ -30,9 +37,32 @@ const SOLID_AFTER = 24;
 export const SiteHeader = ({ dict, locale }: Props) => {
   const [solid, setSolid] = useState(false);
   const [open, setOpen] = useState(false);
+  // Tracked here rather than in the switcher because this component already
+  // runs a scroll listener, and there are two switchers on the page — desktop
+  // and mobile. One listener, two consumers.
+  const [section, setSection] = useState("");
 
   useEffect(() => {
-    const onScroll = () => setSolid(window.scrollY > SOLID_AFTER);
+    const onScroll = () => {
+      setSolid(window.scrollY > SOLID_AFTER);
+
+      // The LAST section whose top has passed the line is the one being read;
+      // they are tall, so several are above it at any moment. `NAV_ITEMS` is in
+      // document order, which is what makes taking the last one correct.
+      let current = "";
+
+      for (const item of NAV_ITEMS) {
+        const element = document.getElementById(item.id);
+
+        if (element && element.getBoundingClientRect().top <= ACTIVE_LINE) {
+          current = item.id;
+        }
+      }
+
+      // React bails out when the value is unchanged, so this does not re-render
+      // on every scroll event — only when the section actually changes.
+      setSection(current);
+    };
 
     onScroll();
     // Passive: this listener never calls `preventDefault`, and saying so keeps
@@ -91,6 +121,7 @@ export const SiteHeader = ({ dict, locale }: Props) => {
           <LanguageSwitcher
             locale={locale}
             label={dict.actions.switchLanguage}
+            section={section}
             className="hidden sm:inline-flex"
           />
 
@@ -154,6 +185,7 @@ export const SiteHeader = ({ dict, locale }: Props) => {
               <LanguageSwitcher
                 locale={locale}
                 label={dict.actions.switchLanguage}
+                section={section}
                 className="justify-center"
               />
             </div>

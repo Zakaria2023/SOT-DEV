@@ -25,6 +25,7 @@ npm run lint    # must pass before committing
 | Copy            | `lib/dictionaries/en.ts` and `ar.ts`, keyed by id                            |
 | Everything else | `lib/landing.ts` — icons, colours, ordering, figures                         |
 | Switch          | Header and mobile menu, labelled in the language it goes to                  |
+| On switch       | Lands on the same _section_, not the same pixel offset                       |
 
 The split matters: a capability's teal and its icon are written down **once**,
 not once per language, so a third language cannot accidentally give Odoo a
@@ -37,6 +38,13 @@ layout — every component is written with logical properties (`ms`/`me`,
 `ps`/`pe`, `start`/`end`) rather than `ml`/`pl`/`left`. The Arabic faces sit
 _behind_ the Latin ones in the stack rather than replacing them, so `Next.js` on
 the Arabic page still renders in Bricolage.
+
+Switching language keeps you in the section you were reading. `<Link>` does not
+scroll to the top — Next's documented default is to _maintain_ scroll position —
+and since Arabic copy is not the same height as English, holding the pixel offset
+used to drop you into a different section. The switcher carries the active
+section as a hash instead, so `#frameworks` in English lands on `#frameworks` in
+Arabic.
 
 Arabic also gets more line-height than Latin, set once in `globals.css` under
 `[dir="rtl"]`. The headings are `leading-none` and `leading-tight`, which is

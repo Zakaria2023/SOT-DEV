@@ -49,6 +49,14 @@ here — they have nothing to govern.
   mirrors the page, and it can only mirror properties that are logical. The
   exceptions are elements already pinned to `dir="ltr"` (the terminal), where
   physical properties are correct.
+- **`<Link>` does not scroll to the top.** Next's documented default is to
+  MAINTAIN the scroll position, the way a browser does on back/forward. That is
+  right between pages of equal length and wrong between languages: the same copy
+  in Arabic is not the same height as in English, so holding the pixel offset
+  drops the visitor into a different section. The switcher therefore carries the
+  active section as a hash (`/ar#frameworks`), which preserves the place in the
+  argument rather than the number of pixels. Do not "fix" this by removing the
+  hash or by adding `scroll={false}` — both bring the bug back.
 - Arabic type is **Reem Kufi for headings and IBM Plex Sans Arabic for body** —
   the same display-plus-workhorse split the Latin side uses, not one family
   doing both. Both sit _behind_ the Latin faces in the stack rather than
