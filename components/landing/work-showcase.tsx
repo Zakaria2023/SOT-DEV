@@ -1,7 +1,12 @@
 import { Reveal } from "@/components/common/reveal";
 import { SectionHeading } from "@/components/landing/section-heading";
 import { WorkCard } from "@/components/landing/work-card";
+import { Dictionary } from "@/lib/dictionary";
 import { WORK } from "@/lib/landing";
+
+type Props = {
+  dict: Dictionary;
+};
 
 /**
  * Three things we have shipped, on the page's one full-ink band.
@@ -11,21 +16,15 @@ import { WORK } from "@/lib/landing";
  * nothing — so the cards lead with the two numbers that describe the outcome
  * instead.
  */
-export const WorkShowcase = () => (
+export const WorkShowcase = ({ dict }: Props) => (
   <section id="work" className="bg-sot-ink py-24 lg:py-32">
     <div className="mx-auto max-w-350 px-4 sm:px-6 lg:px-10">
-      <SectionHeading
-        tone="dark"
-        eyebrow="Selected work"
-        title="Built here, and still"
-        highlight="running here."
-        description="Three of the systems our team put into production and continues to operate. Names withheld where the contract asks us to; the numbers are the ones being measured today."
-      />
+      <SectionHeading tone="dark" copy={dict.sections.work} />
 
       <div className="mt-16 grid gap-6 lg:grid-cols-3">
-        {WORK.map((item, index) => (
-          <Reveal key={item.name} delay={index * 100} className="h-full">
-            <WorkCard item={item} />
+        {WORK.map((entry, index) => (
+          <Reveal key={entry.id} delay={index * 100} className="h-full">
+            <WorkCard entry={entry} copy={dict.work[entry.id]} />
           </Reveal>
         ))}
       </div>

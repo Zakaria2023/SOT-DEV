@@ -28,6 +28,11 @@ const TOTAL = scriptLength(CODE_SCRIPT);
  * Every line is rendered from the first frame at its full height with its text
  * clipped to nothing. Mounting them as they arrive would grow the window seven
  * times while the visitor reads it, and shift the whole hero each time.
+ *
+ * `dir="ltr"` is pinned on the terminal even on the Arabic page. This is a
+ * shell: the prompt belongs on the left, the timings line up in columns, and a
+ * command flipped into right-to-left order is not a translation of anything —
+ * it is the same command rendered wrongly.
  */
 export const CodeWindow = () => {
   const [typed, setTyped] = useState(0);
@@ -36,7 +41,9 @@ export const CodeWindow = () => {
     // A CSS media query cannot reach a JavaScript timer, so the reduced-motion
     // preference is honoured here by hand: the log appears complete, which is
     // the state it spends most of its time in anyway.
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const reduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
 
     // Counted in a local rather than read back out of state, so the timer never
     // depends on a render having happened first.
@@ -64,7 +71,10 @@ export const CodeWindow = () => {
   }, []);
 
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-sot-hairline-dark bg-sot-night">
+    <div
+      dir="ltr"
+      className="relative overflow-hidden rounded-2xl border border-sot-hairline-dark bg-sot-night"
+    >
       <div className="flex items-center gap-3 border-b border-sot-hairline-dark px-5 py-4">
         {/* Window furniture. Flat discs, not icons — there is nothing here for
             a screen reader to announce, which is why the row is hidden. */}
@@ -79,10 +89,7 @@ export const CodeWindow = () => {
       <div className="px-5 py-6 sm:px-7">
         {CODE_SCRIPT.map((line, index) => {
           const start = OFFSETS[index] ?? 0;
-          const shown = Math.min(
-            line.text.length,
-            Math.max(0, typed - start),
-          );
+          const shown = Math.min(line.text.length, Math.max(0, typed - start));
           const typing = typed > start && typed < start + line.text.length;
 
           return (

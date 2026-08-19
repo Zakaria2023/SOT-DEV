@@ -1,14 +1,15 @@
 /**
  * The flat squares drifting inside the rings. Whole class names and fixed
  * positions, so the decoration costs a Server Component render and no
- * JavaScript at all.
+ * JavaScript at all. Logical `start`/`end`, so the composition mirrors along
+ * with the page rather than staying stubbornly left-handed in Arabic.
  */
 const DRIFTERS = [
-  { colour: "bg-dev-teal", position: "top-6 left-10", size: "h-12 w-12" },
-  { colour: "bg-dev-violet", position: "bottom-10 left-4", size: "h-9 w-9" },
-  { colour: "bg-dev-coral", position: "top-16 right-6", size: "h-10 w-10" },
-  { colour: "bg-sot-gold", position: "bottom-6 right-12", size: "h-14 w-14" },
-  { colour: "bg-dev-azure", position: "top-1/2 left-0", size: "h-8 w-8" },
+  { colour: "bg-dev-teal", position: "top-6 start-10", size: "h-12 w-12" },
+  { colour: "bg-dev-violet", position: "bottom-10 start-4", size: "h-9 w-9" },
+  { colour: "bg-dev-coral", position: "top-16 end-6", size: "h-10 w-10" },
+  { colour: "bg-sot-gold", position: "bottom-6 end-12", size: "h-14 w-14" },
+  { colour: "bg-dev-azure", position: "top-1/2 start-0", size: "h-8 w-8" },
 ];
 
 /**
@@ -16,13 +17,12 @@ const DRIFTERS = [
  * speeds, each carrying a marker, with flat colour squares drifting between
  * them.
  *
- * This replaced a lattice of bordered cells that covered the whole band. That
- * version put a grid directly behind the headline, and no matter how faint the
- * hairlines were the text was being read against a moving pattern — the one
- * thing a hero headline must never have to do. The fix is not a lower opacity,
- * it is putting the decoration somewhere it cannot reach the words: this sits
- * inside the terminal's column, which is empty of copy, and the terminal itself
- * is opaque and sits on top of it.
+ * This sits inside the terminal's column, which is empty of copy, and the
+ * terminal itself is opaque and sits on top of it. An earlier version put a
+ * lattice of cells across the whole band, which meant the headline was being
+ * read against a moving pattern — the one thing a hero headline must never
+ * have to do. The fix was not a lower opacity but decoration that cannot reach
+ * the words.
  *
  * Hidden below `sm`, where the two columns stack and the rings would end up
  * behind the text again.

@@ -1,16 +1,20 @@
 import { CodeWindow } from "@/components/landing/code-window";
 import { HeroGrid } from "@/components/landing/hero-grid";
 import { HeroOrbit } from "@/components/landing/hero-orbit";
-import {
-  CONTACT_WHATSAPP,
-  HERO_HEADLINE,
-  HERO_HEADLINE_ACCENT,
-} from "@/lib/landing";
+import { Dictionary } from "@/lib/dictionary";
+import { CONTACT_WHATSAPP } from "@/lib/landing";
 import { ArrowRight, GitBranch, MapPin, ShieldCheck } from "lucide-react";
 import { Fragment } from "react";
 
+type Props = {
+  dict: Dictionary;
+};
+
 /** Milliseconds between one headline word entering and the next. */
 const WORD_STAGGER = 45;
+
+/** The three reassurances under the buttons, in the order the copy lists them. */
+const TRUST_ICONS = [MapPin, GitBranch, ShieldCheck];
 
 /**
  * The opening band.
@@ -20,7 +24,7 @@ const WORD_STAGGER = 45;
  * `IntersectionObserver` would only add a hydration round trip before the
  * headline could move.
  */
-export const Hero = () => (
+export const Hero = ({ dict }: Props) => (
   <section className="relative overflow-hidden bg-sot-sand">
     <HeroGrid />
 
@@ -31,20 +35,20 @@ export const Hero = () => (
             <span className="absolute inset-0 animate-ring rounded-full bg-dev-pine" />
             <span className="relative h-2 w-2 rounded-full bg-dev-pine" />
           </span>
-          Booking new builds for this quarter
+          {dict.hero.badge}
         </p>
 
         {/* `tracking-tight` because Bricolage's optical-size axis tightens the
             letterforms at display sizes but not the spacing between them; left
             at normal, a 60px headline reads as though it were set for 16px.
 
-            The words use `animate-slide`, which travels without fading. This
-            h1 is the page's Largest Contentful Paint, and Chrome does not count
-            an element at `opacity: 0` as painted — fading it in withheld the
-            LCP until the last word landed. Everything below here still fades,
+            The words use `animate-slide`, which travels without fading. This h1
+            is the page's Largest Contentful Paint, and Chrome does not count an
+            element at `opacity: 0` as painted — fading it in withheld the LCP
+            until the last word landed. Everything below here still fades,
             because nothing below here is the LCP. */}
         <h1 className="font-sot-heading mt-7 text-4xl leading-none tracking-tight text-sot-ink sm:text-5xl lg:text-6xl">
-          {HERO_HEADLINE.map((word, index) => (
+          {dict.hero.headline.map((word, index) => (
             // The space between words is a real text node rather than a margin
             // on the span, so the headline still wraps where it wants to and
             // the gap scales with the type from 4xl up to 6xl.
@@ -60,28 +64,26 @@ export const Hero = () => (
           <span
             className="inline-block animate-slide text-sot-gold-deep"
             style={{
-              animationDelay: `${HERO_HEADLINE.length * WORD_STAGGER}ms`,
+              animationDelay: `${dict.hero.headline.length * WORD_STAGGER}ms`,
             }}
           >
-            {HERO_HEADLINE_ACCENT}
+            {dict.hero.headlineAccent}
           </span>
         </h1>
 
         <p
           className="font-sot mt-7 max-w-xl animate-rise text-base leading-relaxed text-sot-body sm:text-lg"
           style={{
-            animationDelay: `${(HERO_HEADLINE.length + 1) * WORD_STAGGER}ms`,
+            animationDelay: `${(dict.hero.headline.length + 1) * WORD_STAGGER}ms`,
           }}
         >
-          SOT Dev is the engineering studio inside Smart of Things. We design,
-          build and then operate the web platforms, mobile apps and ERP
-          integrations that businesses across the Kingdom run on every day.
+          {dict.hero.description}
         </p>
 
         <div
           className="mt-9 flex animate-rise flex-wrap gap-3"
           style={{
-            animationDelay: `${(HERO_HEADLINE.length + 2) * WORD_STAGGER}ms`,
+            animationDelay: `${(dict.hero.headline.length + 2) * WORD_STAGGER}ms`,
           }}
         >
           {/* WhatsApp, because that is where SOT's own consultation button
@@ -94,45 +96,48 @@ export const Hero = () => (
             rel="noreferrer"
             className="font-sot group inline-flex items-center gap-2 rounded-lg bg-sot-gold-deep px-6 py-3.5 text-base text-white transition-colors hover:bg-sot-gold-deep-hover"
           >
-            Start a project
+            {dict.actions.startProject}
+            {/* Rotated in Arabic so it points along the reading direction, and
+                its hover travel reverses with it. */}
             <ArrowRight
               size={17}
-              className="transition-transform duration-300 group-hover:translate-x-1"
+              className="transition-transform duration-300 group-hover:translate-x-1 rtl:rotate-180 rtl:group-hover:-translate-x-1"
             />
           </a>
           <a
             href="#work"
             className="font-sot inline-flex items-center gap-2 rounded-lg border border-sot-hairline bg-white px-6 py-3.5 text-base text-sot-ink transition-colors hover:border-sot-gold-deep hover:text-sot-gold-deep"
           >
-            See what we have shipped
+            {dict.actions.seeWork}
           </a>
         </div>
 
         <ul
           className="font-sot mt-10 flex animate-rise flex-wrap gap-x-8 gap-y-3 text-sm text-sot-body"
           style={{
-            animationDelay: `${(HERO_HEADLINE.length + 3) * WORD_STAGGER}ms`,
+            animationDelay: `${(dict.hero.headline.length + 3) * WORD_STAGGER}ms`,
           }}
         >
-          <li className="flex items-center gap-2">
-            <MapPin size={16} className="text-sot-gold-deep" />
-            Riyadh, Saudi Arabia
-          </li>
-          <li className="flex items-center gap-2">
-            <GitBranch size={16} className="text-sot-gold-deep" />
-            You own the repository
-          </li>
-          <li className="flex items-center gap-2">
-            <ShieldCheck size={16} className="text-sot-gold-deep" />
-            20 years of SOT behind it
-          </li>
+          {dict.hero.trust.map((item, index) => {
+            const Icon = TRUST_ICONS[index] ?? MapPin;
+
+            return (
+              <li key={item} className="flex items-center gap-2">
+                <Icon size={16} className="text-sot-gold-deep" />
+                {item}
+              </li>
+            );
+          })}
         </ul>
       </div>
 
       <div className="relative flex items-center justify-center">
         <HeroOrbit />
 
-        <div className="relative w-full max-w-lg animate-rise" style={{ animationDelay: "260ms" }}>
+        <div
+          className="relative w-full max-w-lg animate-rise"
+          style={{ animationDelay: "260ms" }}
+        >
           <CodeWindow />
         </div>
       </div>

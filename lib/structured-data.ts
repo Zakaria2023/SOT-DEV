@@ -1,12 +1,12 @@
+import { Dictionary } from "@/lib/dictionary";
+import { Locale, htmlLang } from "@/lib/i18n";
 import {
-  CAPABILITIES,
+  CAPABILITY_ORDER,
   CONTACT_ADDRESS,
   CONTACT_EMAIL,
   CONTACT_PHONES,
   CONTACT_PHONE_UNIFIED,
-  FAQ,
   FRAMEWORKS,
-  SITE_DESCRIPTION,
   SITE_NAME,
 } from "@/lib/landing";
 import { SITE_URL, absoluteUrl } from "@/lib/seo";
@@ -16,16 +16,16 @@ export type JsonLd = Record<string, unknown>;
 /**
  * The organisation behind the page.
  *
- * `@id` is a stable fragment on the site's own origin rather than a bare name,
- * which is what lets the other nodes point AT this one — a `publisher` that
- * repeats the whole organisation inline gives a crawler two organisations to
- * reconcile instead of one to resolve.
+ * `@id` has NO locale in it, deliberately. There is one company, and the
+ * English and Arabic pages must describe the same entity rather than two that a
+ * crawler then has to guess are related. The `WebPage` and `WebSite` nodes are
+ * per-locale and point at this one.
  *
  * The head office only. The showroom and the wholesale branch are separate
  * places, not second addresses for this one, and listing three under a single
  * Organization says the company has three head offices.
  */
-export const organizationNode = (): JsonLd => ({
+export const organizationNode = (dict: Dictionary): JsonLd => ({
   "@type": "Organization",
   "@id": `${SITE_URL}/#organization`,
   name: SITE_NAME,
@@ -37,7 +37,7 @@ export const organizationNode = (): JsonLd => ({
     width: 210,
     height: 116,
   },
-  description: SITE_DESCRIPTION,
+  description: dict.meta.description,
   email: CONTACT_EMAIL,
   telephone: `+966${CONTACT_PHONE_UNIFIED}`,
   address: {
@@ -71,31 +71,33 @@ export const organizationNode = (): JsonLd => ({
   ],
 });
 
-export const webSiteNode = (): JsonLd => ({
+export const webSiteNode = (locale: Locale, dict: Dictionary): JsonLd => ({
   "@type": "WebSite",
-  "@id": `${SITE_URL}/#website`,
-  url: SITE_URL,
+  "@id": `${SITE_URL}/${locale}#website`,
+  url: `${SITE_URL}/${locale}`,
   name: SITE_NAME,
-  description: SITE_DESCRIPTION,
-  inLanguage: "en",
+  description: dict.meta.description,
+  inLanguage: htmlLang(locale),
   publisher: { "@id": `${SITE_URL}/#organization` },
 });
 
 /**
- * The studio as a service business, with its six capabilities as an offer
+ * The studio as a service business, with its capabilities as an offer
  * catalogue.
  *
- * Built from `CAPABILITIES` rather than written out again, so a service added
- * to the page is a service added to the markup. The commonest way structured
- * data goes wrong is not being invalid — it is being a second, stale copy of
- * what the page says, which is exactly what Google penalises it for.
+ * Built from `CAPABILITY_ORDER` and the dictionary rather than written out
+ * again, so a service added to the page is a service added to the markup — in
+ * both languages at once.
  */
-export const professionalServiceNode = (): JsonLd => ({
+export const professionalServiceNode = (
+  locale: Locale,
+  dict: Dictionary,
+): JsonLd => ({
   "@type": "ProfessionalService",
-  "@id": `${SITE_URL}/#studio`,
+  "@id": `${SITE_URL}/${locale}#studio`,
   name: SITE_NAME,
-  description: SITE_DESCRIPTION,
-  url: SITE_URL,
+  description: dict.meta.description,
+  url: `${SITE_URL}/${locale}`,
   image: absoluteUrl("/sot-logo.webp"),
   parentOrganization: { "@id": `${SITE_URL}/#organization` },
   address: {
@@ -110,14 +112,14 @@ export const professionalServiceNode = (): JsonLd => ({
   knowsAbout: FRAMEWORKS.map((framework) => framework.name),
   hasOfferCatalog: {
     "@type": "OfferCatalog",
-    name: "Software engineering services",
-    itemListElement: CAPABILITIES.map((capability) => ({
+    name: dict.sections.capabilities.eyebrow,
+    itemListElement: CAPABILITY_ORDER.map((id) => ({
       "@type": "Offer",
       itemOffered: {
         "@type": "Service",
-        name: capability.title,
-        description: capability.description,
-        serviceType: capability.title,
+        name: dict.capabilities[id].title,
+        description: dict.capabilities[id].description,
+        serviceType: dict.capabilities[id].title,
         provider: { "@id": `${SITE_URL}/#organization` },
       },
     })),
@@ -128,13 +130,14 @@ export const professionalServiceNode = (): JsonLd => ({
  * The FAQ band, restated for a crawler.
  *
  * Google only shows a rich result when the markup and the visible answers
- * agree, so this reads the same `FAQ` constant the accordion renders. If the
+ * agree, so this reads the same `dict.faq` the accordion renders. If the
  * section is ever removed from the page, this node has to go with it.
  */
-export const faqPageNode = (): JsonLd => ({
+export const faqPageNode = (locale: Locale, dict: Dictionary): JsonLd => ({
   "@type": "FAQPage",
-  "@id": `${SITE_URL}/#faq`,
-  mainEntity: FAQ.map((item) => ({
+  "@id": `${SITE_URL}/${locale}#faq`,
+  inLanguage: htmlLang(locale),
+  mainEntity: dict.faq.map((item) => ({
     "@type": "Question",
     name: item.question,
     acceptedAnswer: {
@@ -144,15 +147,15 @@ export const faqPageNode = (): JsonLd => ({
   })),
 });
 
-export const webPageNode = (): JsonLd => ({
+export const webPageNode = (locale: Locale, dict: Dictionary): JsonLd => ({
   "@type": "WebPage",
-  "@id": `${SITE_URL}/#webpage`,
-  url: SITE_URL,
-  name: SITE_NAME,
-  description: SITE_DESCRIPTION,
-  isPartOf: { "@id": `${SITE_URL}/#website` },
+  "@id": `${SITE_URL}/${locale}#webpage`,
+  url: `${SITE_URL}/${locale}`,
+  name: `${SITE_NAME} — ${dict.meta.tagline}`,
+  description: dict.meta.description,
+  isPartOf: { "@id": `${SITE_URL}/${locale}#website` },
   about: { "@id": `${SITE_URL}/#organization` },
-  inLanguage: "en",
+  inLanguage: htmlLang(locale),
   primaryImageOfPage: absoluteUrl("/sot-logo.webp"),
 });
 

@@ -4,40 +4,47 @@ const COLUMN_COUNT = 12;
 /**
  * The signals that run down the rules.
  *
- * Positions are Tailwind's own fraction scale rather than arbitrary
- * percentages, and they land on column boundaries by construction: a twelfth,
- * a quarter, five twelfths and so on are exactly where the rules are. Each has
- * its own duration and offset so the six never fall into step — the fastest
- * thing to make an animation look cheap is six of it doing the same thing.
+ * Positions come from Tailwind's own fraction scale rather than arbitrary
+ * percentages, and land on column boundaries by construction: a twelfth, a
+ * quarter, five twelfths and so on are exactly where the rules are. `start-`
+ * rather than `left-`, so the composition mirrors with the rest of the page.
+ *
+ * Each has its own duration and offset, because the fastest way to make an
+ * animation look cheap is six of it doing the same thing at the same time.
  */
 const PULSES = [
-  { position: "left-1/12", colour: "bg-dev-teal", duration: "11s", delay: "0s" },
   {
-    position: "left-1/4",
+    position: "start-1/12",
+    colour: "bg-dev-teal",
+    duration: "11s",
+    delay: "0s",
+  },
+  {
+    position: "start-1/4",
     colour: "bg-sot-gold",
     duration: "15s",
     delay: "2.4s",
   },
   {
-    position: "left-5/12",
+    position: "start-5/12",
     colour: "bg-dev-violet",
     duration: "9s",
     delay: "5.1s",
   },
   {
-    position: "left-7/12",
+    position: "start-7/12",
     colour: "bg-dev-azure",
     duration: "13s",
     delay: "1.2s",
   },
   {
-    position: "left-3/4",
+    position: "start-3/4",
     colour: "bg-dev-coral",
     duration: "10s",
     delay: "6.3s",
   },
   {
-    position: "left-11/12",
+    position: "start-11/12",
     colour: "bg-dev-pine",
     duration: "16s",
     delay: "3.7s",
@@ -72,7 +79,7 @@ export const HeroGrid = () => (
         // twelve columns crushed into 390px.
         <div
           key={index}
-          className={`flex-1 border-r border-sot-hairline ${
+          className={`flex-1 border-e border-sot-hairline ${
             index % 2 === 1 ? "hidden lg:block" : ""
           }`}
         />
@@ -83,7 +90,10 @@ export const HeroGrid = () => (
       <span
         key={pulse.position}
         className={`absolute top-0 h-2 w-2 animate-trace rounded-full ${pulse.colour} ${pulse.position}`}
-        style={{ animationDuration: pulse.duration, animationDelay: pulse.delay }}
+        style={{
+          animationDuration: pulse.duration,
+          animationDelay: pulse.delay,
+        }}
       />
     ))}
   </div>

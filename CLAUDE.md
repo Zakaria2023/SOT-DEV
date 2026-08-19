@@ -5,12 +5,19 @@
 ## What this project is
 
 `sot-dev` is a **single marketing landing page** for SOT Dev, the software
-engineering studio inside Smart of Things. It is the front door only.
+engineering studio inside Smart of Things, published in **English and Arabic**.
+It is the front door only.
 
 - **There is no backend.** No database, no ORM, no route handlers, no server
   actions, no auth, no external API calls. Nothing on this page fetches.
-- All copy, lists and figures are static data in `lib/landing.ts`. A new
-  section means a new entry there plus a component that renders it.
+- The one exception is `proxy.ts`, and it exists for a single redirect: every
+  page lives under `/[lang]`, so the bare origin has nothing to render and
+  something has to pick a language. It does that and nothing else. Do not grow
+  it into a request pipeline.
+- Content is split in two on purpose. **Words** live in `lib/dictionaries/`,
+  keyed by id. **Everything that is not words** — icons, colours, ordering,
+  figures — lives in `lib/landing.ts` under those same ids, so a capability's
+  teal is written down once rather than once per language.
 - Because nothing is async, there is no `<Suspense>`, no `loading.tsx`, and no
   skeletons. If you find yourself reaching for one, the page has grown a
   backend and that decision needs making explicitly first.
@@ -19,6 +26,41 @@ These rules are carried over from the SOT monorepo so the two properties are
 written the same way. The backend chapters of that document (schema, DTOs,
 route handlers, server actions, auth, form submissions) are deliberately absent
 here — they have nothing to govern.
+
+## Internationalisation
+
+- Two locales, `en` and `ar`, defined once in `lib/i18n.ts`. `generateStaticParams`,
+  the switcher, the sitemap and the `hreflang` alternates all derive from that
+  one list — never write a locale out by hand somewhere else.
+- **Never put a user-visible string in a component.** It goes in the dictionary
+  and arrives as `dict.something`. A component that hard-codes English is a
+  component that renders English on the Arabic page.
+- `en.ts` is the source of truth for the shape and both files end
+  `satisfies Dictionary`, so a key missing from either is a compile error rather
+  than a blank on the page.
+- **What is deliberately NOT translated:** product names (Next.js, PostgreSQL,
+  Odoo), the tooling ticker, the work-card tags, and the deploy log in the hero
+  terminal. Those are proper nouns and command output. Pin them with `dir="ltr"`
+  where they sit inside Arabic text, or the bidi algorithm relocates their
+  punctuation and `Next.js` renders as `.Next`.
+- **Write every directional utility as a logical one** — `ms`/`me`, `ps`/`pe`,
+  `start`/`end`, `text-start`, `border-e` — never `ml`, `pl`, `left`,
+  `text-left`, `border-r`. `dir="rtl"` on `<html>` is the only thing that
+  mirrors the page, and it can only mirror properties that are logical. The
+  exceptions are elements already pinned to `dir="ltr"` (the terminal), where
+  physical properties are correct.
+- Arabic type comes from Cairo, sitting _behind_ the Latin faces in the font
+  stack rather than replacing them, so Latin product names on the Arabic page
+  still render in the faces they were chosen for.
+
+## Calls to Action
+
+- **Every button on this page opens WhatsApp**, through `CONTACT_WHATSAPP` in
+  `lib/landing.ts` — the same URL and the same number the parent site's
+  consultation button uses. Never hard-code the number or build the URL inline.
+- The email address and the phone numbers stay `mailto:` and `tel:`. They are
+  contact _details_, not buttons; turning a printed address into a third
+  WhatsApp link would be a lie about what it is.
 
 ## Package Manager
 
@@ -188,7 +230,9 @@ here — they have nothing to govern.
 
   ```tsx
   // ❌ Bad
-  <svg viewBox="0 0 24 24"><path d="..." /></svg>
+  <svg viewBox="0 0 24 24">
+    <path d="..." />
+  </svg>;
 
   // ✅ Good
   import { Layers } from "lucide-react";
@@ -313,10 +357,14 @@ Motion is the point of this page, so it has rules of its own:
   ```
   // ✅ Good
   app/
-    layout.tsx
-    page.tsx
-    manifest.ts
+    [lang]/
+      layout.tsx          <- the root layout; <html lang> and dir live here
+      page.tsx
+      opengraph-image.tsx
     globals.css
+    manifest.ts
+    robots.ts
+    sitemap.ts
 
   components/
     common/
@@ -324,10 +372,18 @@ Motion is the point of this page, so it has rules of its own:
     landing/
       hero.tsx
       capability-card.tsx
+    seo/
+      json-ld.tsx
 
   lib/
-    landing.ts
-    use-in-view.ts
+    dictionaries/
+      en.ts
+      ar.ts
+    dictionary.ts         <- the shape both dictionaries satisfy
+    i18n.ts
+    landing.ts            <- icons, colours, ids. No copy.
+
+  proxy.ts                <- the one redirect, and nothing else
   ```
 
 ## One Component Per File

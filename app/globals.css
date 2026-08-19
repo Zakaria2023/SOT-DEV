@@ -90,11 +90,19 @@
      Components name `font-sot`, `font-sot-heading` and `font-sot-mono` rather
      than the families directly, so the type can be changed here without a
      single component being touched — which is exactly what happened when Lato
-     and Roboto were replaced. */
-  --font-sot: var(--font-manrope), sans-serif;
-  --font-sot-heading: var(--font-bricolage), sans-serif;
+     and Roboto were replaced.
+
+     CAIRO SITS BEHIND THE LATIN FACES rather than replacing them on the Arabic
+     page. Neither Bricolage nor Manrope has a single Arabic glyph, so a browser
+     rendering Arabic walks the stack and reaches Cairo for exactly those
+     characters — while "Next.js" and "PostgreSQL", which appear on the Arabic
+     page too, still come out in the faces they were chosen for. One stack, no
+     per-language stylesheet, and on the English page Cairo is never fetched
+     because no glyph ever falls through to it. */
+  --font-sot: var(--font-manrope), var(--font-cairo), sans-serif;
+  --font-sot-heading: var(--font-bricolage), var(--font-cairo), sans-serif;
   --font-sot-mono: var(--font-jetbrains-mono), monospace;
-  --font-sans: var(--font-manrope), sans-serif;
+  --font-sans: var(--font-manrope), var(--font-cairo), sans-serif;
 }
 
 /* The list is rendered twice inside the track, so one loop is exactly half the

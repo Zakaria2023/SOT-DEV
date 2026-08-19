@@ -1,11 +1,15 @@
 "use client";
 
-import { FAQ } from "@/lib/landing";
+import { FaqCopy } from "@/lib/dictionary";
 import { Plus } from "lucide-react";
 import { useState } from "react";
 
+type Props = {
+  items: FaqCopy[];
+};
+
 /**
- * The five questions, one open at a time.
+ * The questions, one open at a time.
  *
  * The answers stay mounted and are collapsed with a grid row going from `0fr`
  * to `1fr` rather than being unmounted or given a fixed `max-height`. That is
@@ -17,12 +21,12 @@ import { useState } from "react";
  * a heading that happens to move — a screen reader announces the state and can
  * jump straight to the answer it opened.
  */
-export const FaqAccordion = () => {
+export const FaqAccordion = ({ items }: Props) => {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
     <div className="mx-auto mt-14 max-w-3xl">
-      {FAQ.map((item, index) => {
+      {items.map((item, index) => {
         const expanded = openIndex === index;
 
         return (
@@ -33,7 +37,7 @@ export const FaqAccordion = () => {
               aria-expanded={expanded}
               aria-controls={`faq-answer-${index}`}
               onClick={() => setOpenIndex(expanded ? null : index)}
-              className="font-sot-heading flex w-full items-center justify-between gap-6 py-6 text-left text-lg font-medium text-sot-ink transition-colors hover:text-sot-gold-deep"
+              className="font-sot-heading flex w-full items-center justify-between gap-6 py-6 text-start text-lg font-medium text-sot-ink transition-colors hover:text-sot-gold-deep"
             >
               {item.question}
               {/* One icon doing both jobs: a plus that turns forty-five degrees

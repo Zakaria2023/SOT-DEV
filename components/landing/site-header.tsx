@@ -1,10 +1,18 @@
 "use client";
 
-import { CONTACT_EMAIL, NAV_LINKS } from "@/lib/landing";
+import { LanguageSwitcher } from "@/components/landing/language-switcher";
+import { Dictionary } from "@/lib/dictionary";
+import { Locale } from "@/lib/i18n";
+import { CONTACT_WHATSAPP, NAV_ITEMS } from "@/lib/landing";
 import { Menu, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+
+type Props = {
+  dict: Dictionary;
+  locale: Locale;
+};
 
 /** How far down the page the header stops being transparent. */
 const SOLID_AFTER = 24;
@@ -13,13 +21,13 @@ const SOLID_AFTER = 24;
  * The site header: a transparent bar over the hero that takes on a surface and
  * a hairline once the page has moved under it.
  *
- * It is one of the four client components on this page, and only because of
- * that scroll state and the mobile panel. The logo has to sit on a light
- * surface to read at all — the wordmark half of the mark is dark grey — so the
- * bar goes white rather than inverting, which is also why it never picks up the
- * ink treatment the bands below it use.
+ * One of the few client components here, and only because of that scroll state
+ * and the mobile panel. The logo has to sit on a light surface to read at all —
+ * the wordmark half of the mark is dark grey — so the bar goes white rather
+ * than inverting, which is also why it never picks up the ink treatment the
+ * bands below it use.
  */
-export const SiteHeader = () => {
+export const SiteHeader = ({ dict, locale }: Props) => {
   const [solid, setSolid] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -43,15 +51,10 @@ export const SiteHeader = () => {
       }`}
     >
       <div className="mx-auto flex max-w-350 items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-10">
-        {/* `prefetch={false}` because this is a one-page site and the only
-            Link on it points at the page the visitor is already reading. Left
-            on, Next fires RSC prefetches for `/` during load — about 20KiB
-            competing for bandwidth with the font the headline is waiting for,
-            spent fetching a route nobody can navigate to. */}
         <Link
-          href="/"
+          href={`/${locale}`}
           prefetch={false}
-          aria-label="SOT Dev — home"
+          aria-label={dict.actions.home}
           className="shrink-0"
         >
           <Image
@@ -60,43 +63,53 @@ export const SiteHeader = () => {
             width={210}
             height={116}
             priority
-            // Rendered at roughly a quarter of the file's width, so `sizes`
-            // stops the optimizer assuming 100vw and shipping the 210px
-            // original into a 96px box.
+            // Rendered at roughly half the file's width, so `sizes` stops the
+            // optimizer assuming 100vw and shipping the original into a 120px
+            // box.
             sizes="120px"
             className="h-11 w-auto sm:h-13"
           />
         </Link>
 
         <nav aria-label="Main" className="hidden items-center gap-8 lg:flex">
-          {NAV_LINKS.map((link) => (
+          {NAV_ITEMS.map((item) => (
             // A jump to a section on this same page, not a route — so it is an
             // anchor rather than a `Link`.
             <a
-              key={link.href}
-              href={link.href}
+              key={item.id}
+              href={item.href}
               className="font-sot group relative py-2 text-base text-sot-body transition-colors hover:text-sot-gold-deep"
             >
-              {link.label}
-              {/* The rule underneath draws itself in from the left on hover. */}
-              <span className="absolute bottom-0 left-0 h-px w-0 bg-sot-gold-deep transition-all duration-300 group-hover:w-full" />
+              {dict.nav[item.id]}
+              {/* The rule underneath draws itself in from the reading edge. */}
+              <span className="absolute bottom-0 start-0 h-px w-0 bg-sot-gold-deep transition-all duration-300 group-hover:w-full" />
             </a>
           ))}
         </nav>
 
         <div className="flex shrink-0 items-center gap-2">
+          <LanguageSwitcher
+            locale={locale}
+            label={dict.actions.switchLanguage}
+            className="hidden sm:inline-flex"
+          />
+
+          {/* WhatsApp, like every other call to action on the page. It leaves
+              the site, so it is an anchor rather than a `Link`. */}
           <a
-            href={`mailto:${CONTACT_EMAIL}`}
+            href={CONTACT_WHATSAPP}
+            target="_blank"
+            rel="noreferrer"
             className="font-sot hidden rounded-lg bg-sot-ink px-5 py-2.5 text-base text-white transition-colors hover:bg-sot-gold-deep sm:inline-block"
           >
-            Start a project
+            {dict.actions.startProject}
           </a>
 
           <button
             type="button"
             onClick={() => setOpen((current) => !current)}
             aria-expanded={open}
-            aria-label={open ? "Close menu" : "Open menu"}
+            aria-label={open ? dict.actions.closeMenu : dict.actions.openMenu}
             className="rounded-lg border border-sot-hairline p-2.5 text-sot-ink transition-colors hover:border-sot-gold-deep hover:text-sot-gold-deep lg:hidden"
           >
             {open ? <X size={20} /> : <Menu size={20} />}
@@ -118,22 +131,32 @@ export const SiteHeader = () => {
             aria-label="Main, mobile"
             className="mx-auto flex max-w-350 flex-col px-4 py-3 sm:px-6"
           >
-            {NAV_LINKS.map((link) => (
+            {NAV_ITEMS.map((item) => (
               <a
-                key={link.href}
-                href={link.href}
+                key={item.id}
+                href={item.href}
                 onClick={() => setOpen(false)}
                 className="font-sot border-b border-sot-hairline py-3.5 text-base text-sot-body transition-colors last:border-b-0 hover:text-sot-gold-deep"
               >
-                {link.label}
+                {dict.nav[item.id]}
               </a>
             ))}
-            <a
-              href={`mailto:${CONTACT_EMAIL}`}
-              className="font-sot mt-4 rounded-lg bg-sot-ink px-5 py-3 text-center text-base text-white sm:hidden"
-            >
-              Start a project
-            </a>
+
+            <div className="mt-4 flex flex-col gap-3 sm:hidden">
+              <a
+                href={CONTACT_WHATSAPP}
+                target="_blank"
+                rel="noreferrer"
+                className="font-sot rounded-lg bg-sot-ink px-5 py-3 text-center text-base text-white"
+              >
+                {dict.actions.startProject}
+              </a>
+              <LanguageSwitcher
+                locale={locale}
+                label={dict.actions.switchLanguage}
+                className="justify-center"
+              />
+            </div>
           </nav>
         </div>
       </div>
