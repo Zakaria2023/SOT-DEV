@@ -132,11 +132,7 @@ export const en = {
       title: "Cloud & DevOps",
       description:
         "Infrastructure written down as code, deployed on a pipeline, and watched by something that pages a human before your customers notice.",
-      bullets: [
-        "CI/CD pipelines",
-        "Containers & IaC",
-        "Monitoring & alerting",
-      ],
+      bullets: ["CI/CD pipelines", "Containers & IaC", "Monitoring & alerting"],
     },
     ai: {
       title: "AI & Automation",
@@ -144,8 +140,9 @@ export const en = {
         "Assistants and document pipelines wired into your own data, with the retrieval and the guardrails that keep every answer attributable.",
       bullets: [
         "Retrieval over your data",
+        "Agents & assistants",
         "Workflow automation",
-        "Evaluations",
+        "Model evaluation",
       ],
     },
     design: {
