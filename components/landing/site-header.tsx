@@ -43,7 +43,17 @@ export const SiteHeader = () => {
       }`}
     >
       <div className="mx-auto flex max-w-350 items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-10">
-        <Link href="/" aria-label="SOT Dev — home" className="shrink-0">
+        {/* `prefetch={false}` because this is a one-page site and the only
+            Link on it points at the page the visitor is already reading. Left
+            on, Next fires RSC prefetches for `/` during load — about 20KiB
+            competing for bandwidth with the font the headline is waiting for,
+            spent fetching a route nobody can navigate to. */}
+        <Link
+          href="/"
+          prefetch={false}
+          aria-label="SOT Dev — home"
+          className="shrink-0"
+        >
           <Image
             src="/sot-logo.webp"
             alt="SOT"
@@ -65,11 +75,11 @@ export const SiteHeader = () => {
             <a
               key={link.href}
               href={link.href}
-              className="font-sot group relative py-2 text-base text-sot-body transition-colors hover:text-sot-gold"
+              className="font-sot group relative py-2 text-base text-sot-body transition-colors hover:text-sot-gold-deep"
             >
               {link.label}
               {/* The rule underneath draws itself in from the left on hover. */}
-              <span className="absolute bottom-0 left-0 h-px w-0 bg-sot-gold transition-all duration-300 group-hover:w-full" />
+              <span className="absolute bottom-0 left-0 h-px w-0 bg-sot-gold-deep transition-all duration-300 group-hover:w-full" />
             </a>
           ))}
         </nav>
@@ -77,7 +87,7 @@ export const SiteHeader = () => {
         <div className="flex shrink-0 items-center gap-2">
           <a
             href={`mailto:${CONTACT_EMAIL}`}
-            className="font-sot hidden rounded-lg bg-sot-ink px-5 py-2.5 text-base text-white transition-colors hover:bg-sot-gold sm:inline-block"
+            className="font-sot hidden rounded-lg bg-sot-ink px-5 py-2.5 text-base text-white transition-colors hover:bg-sot-gold-deep sm:inline-block"
           >
             Start a project
           </a>
@@ -87,7 +97,7 @@ export const SiteHeader = () => {
             onClick={() => setOpen((current) => !current)}
             aria-expanded={open}
             aria-label={open ? "Close menu" : "Open menu"}
-            className="rounded-lg border border-sot-hairline p-2.5 text-sot-ink transition-colors hover:border-sot-gold hover:text-sot-gold lg:hidden"
+            className="rounded-lg border border-sot-hairline p-2.5 text-sot-ink transition-colors hover:border-sot-gold-deep hover:text-sot-gold-deep lg:hidden"
           >
             {open ? <X size={20} /> : <Menu size={20} />}
           </button>
@@ -113,7 +123,7 @@ export const SiteHeader = () => {
                 key={link.href}
                 href={link.href}
                 onClick={() => setOpen(false)}
-                className="font-sot border-b border-sot-hairline py-3.5 text-base text-sot-body transition-colors last:border-b-0 hover:text-sot-gold"
+                className="font-sot border-b border-sot-hairline py-3.5 text-base text-sot-body transition-colors last:border-b-0 hover:text-sot-gold-deep"
               >
                 {link.label}
               </a>

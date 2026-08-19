@@ -25,7 +25,7 @@ export const ProcessStepCard = ({ step, position }: Props) => {
         <Icon size={22} strokeWidth={1.6} />
       </div>
 
-      <p className="font-sot mt-6 text-xs tracking-widest text-sot-gold uppercase">
+      <p className="font-sot mt-6 text-xs tracking-widest text-sot-gold-deep uppercase">
         Step {position}
       </p>
 

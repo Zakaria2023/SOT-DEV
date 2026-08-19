@@ -57,7 +57,7 @@ export const CtaBand = () => (
           href={CONTACT_WHATSAPP}
           target="_blank"
           rel="noreferrer"
-          className="font-sot group inline-flex items-center gap-2 rounded-lg bg-sot-gold px-7 py-3.5 text-base text-white transition-colors hover:bg-sot-gold-dark"
+          className="font-sot group inline-flex items-center gap-2 rounded-lg bg-sot-gold-deep px-7 py-3.5 text-base text-white transition-colors hover:bg-sot-gold-deep-hover"
         >
           Book a scoping call
           <ArrowRight

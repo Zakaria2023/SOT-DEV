@@ -11,6 +11,23 @@
      one without a white plate beneath it. */
   --color-sot-gold: #b99253;
   --color-sot-gold-dark: #a07c40;
+
+  /* ---- THE GOLD HAS TWO JOBS AND THEY NEED TWO VALUES ----
+
+     #b99253 is the brand gold and it is a mid-tone. Against sand it measures
+     2.6:1 and against white 2.9:1, and white on top of it is 2.9:1 — so as
+     TEXT on a light surface, and as a BUTTON FILL under white text, it fails
+     WCAG AA outright. It is fine as text on ink (5.3:1) and it is fine as a
+     rule, a dot or an icon plate, where the requirement does not apply.
+
+     So the rule for this page is: on a light surface gold is `sot-gold-deep`;
+     on a dark surface it stays `sot-gold`. The deep value is #8a6a34, which is
+     not invented here — it is the SOT portal's own `--color-primary-solid`,
+     chosen there for exactly this reason. It measures 5.0:1 on white, 4.5:1 on
+     sand, and 5.0:1 under white text, so one token covers gold text on light
+     and every gold button on the page. */
+  --color-sot-gold-deep: #8a6a34;
+  --color-sot-gold-deep-hover: #6f5528;
   --color-sot-ink: #2e2414;
   --color-sot-night: #1b1610;
   --color-sot-sand: #f5f3f0;
@@ -39,6 +56,17 @@
   --color-dev-coral: #c9451f;
   --color-dev-pine: #2f7d4f;
 
+  /* The six above are tuned to clear 4.5:1 against WHITE, which is where they
+     are read. Two of them are also read against near-black — in the terminal,
+     and on the framework grid — and a colour cannot be legible on both ends of
+     the range at once. Teal drops to 4.5 on white only when darkened; pine and
+     azure sit at 3.6:1 on ink, which is a colour you can see and a word you
+     cannot read. Hence three variants, each named for the surface it belongs
+     on rather than for how light it is. */
+  --color-dev-teal-deep: #0f7570;
+  --color-dev-pine-on-dark: #4fbe7e;
+  --color-dev-azure-on-dark: #6cb6f5;
+
   /* Named animations, so components ask for `animate-marquee` rather than
      carrying a timing function around in an arbitrary class. */
   --animate-marquee: marquee 42s linear infinite;
@@ -49,8 +77,11 @@
   --animate-orbit: orbit 22s linear infinite;
   --animate-orbit-reverse: orbit 34s linear infinite reverse;
   --animate-ring: ring 3.4s ease-out infinite;
-  --animate-rise: rise 0.8s ease-out both;
+  --animate-rise: rise 0.6s ease-out both;
+  --animate-slide: slide 0.6s ease-out both;
   --animate-sweep: sweep 2.6s ease-in-out infinite;
+  /* Duration is overridden per pulse so the six never fall in step. */
+  --animate-trace: trace 12s linear infinite;
 }
 
 @theme inline {
@@ -154,6 +185,44 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+/* `rise` without the fade, and the difference is not cosmetic.
+
+   The headline is the page's Largest Contentful Paint. Chrome does not count an
+   element at `opacity: 0` as painted, so animating the h1 in from transparent
+   meant LCP was not recorded until the last word finished fading — 77% of a
+   two-second LCP was this animation, and the fix for it is not a smaller
+   number, it is not hiding the headline in the first place.
+
+   So the words travel and never fade: the text is painted at full strength on
+   the very first frame and still arrives with movement. Everything below the
+   headline keeps `rise`, because nothing below the headline is the LCP. */
+@keyframes slide {
+  from {
+    transform: translateY(14px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+/* A signal running down one of the hero's ruled columns. It fades in after
+   leaving the top edge and out before reaching the bottom, so it reads as
+   something passing through rather than something entering and stopping. */
+@keyframes trace {
+  0% {
+    transform: translateY(-15vh);
+    opacity: 0;
+  }
+  12%,
+  86% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(115vh);
+    opacity: 0;
   }
 }
 

@@ -73,7 +73,7 @@ export const CodeWindow = () => {
           <span className="h-3 w-3 rounded-full bg-sot-gold" />
           <span className="h-3 w-3 rounded-full bg-dev-pine" />
         </span>
-        <p className="font-sot-mono text-xs text-white/40">sot-dev — deploy</p>
+        <p className="font-sot-mono text-xs text-white/60">sot-dev — deploy</p>
       </div>
 
       <div className="px-5 py-6 sm:px-7">
@@ -104,7 +104,7 @@ export const CodeWindow = () => {
           <span className="absolute inset-0 animate-ring rounded-full bg-dev-pine" />
           <span className="relative h-2 w-2 rounded-full bg-dev-pine" />
         </span>
-        <p className="font-sot-mono text-xs text-white/40">
+        <p className="font-sot-mono text-xs text-white/60">
           riyadh-1 · all systems healthy
         </p>
       </div>

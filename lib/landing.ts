@@ -29,10 +29,9 @@ export type NavLink = {
 /**
  * A service the studio sells.
  *
- * `fill`, `edge` and `text` are whole Tailwind class names rather than a colour
- * token assembled at render time — Tailwind scans this file for literal
- * strings, and a class built as `bg-dev-${name}` is a class that never gets
- * generated.
+ * `fill` and `edge` are whole Tailwind class names rather than a colour token
+ * assembled at render time — Tailwind scans this file for literal strings, and
+ * a class built as `bg-dev-${name}` is a class that never gets generated.
  */
 export type Capability = {
   title: string;
@@ -40,7 +39,6 @@ export type Capability = {
   icon: LucideIcon;
   fill: string;
   edge: string;
-  text: string;
   bullets: string[];
 };
 
@@ -174,11 +172,11 @@ export const HERO_HEADLINE_ACCENT = "your operation.";
 /** The deploy log that types itself out beside the headline. */
 export const CODE_SCRIPT: CodeLine[] = [
   { text: "$ sot deploy --env production", tone: "text-sot-gold" },
-  { text: "✓ typecheck      1.9s", tone: "text-dev-pine" },
-  { text: "✓ lint           0.8s", tone: "text-dev-pine" },
-  { text: "✓ build         24.3s", tone: "text-dev-pine" },
-  { text: "✓ tests    214 passed", tone: "text-dev-pine" },
-  { text: "→ uploading to riyadh-1", tone: "text-dev-azure" },
+  { text: "✓ typecheck      1.9s", tone: "text-dev-pine-on-dark" },
+  { text: "✓ lint           0.8s", tone: "text-dev-pine-on-dark" },
+  { text: "✓ build         24.3s", tone: "text-dev-pine-on-dark" },
+  { text: "✓ tests    214 passed", tone: "text-dev-pine-on-dark" },
+  { text: "→ uploading to riyadh-1", tone: "text-dev-azure-on-dark" },
   { text: "✓ live in 41s", tone: "text-sot-gold" },
 ];
 
@@ -203,7 +201,6 @@ export const CAPABILITIES: Capability[] = [
     icon: LayoutTemplate,
     fill: "bg-dev-teal",
     edge: "group-hover:border-dev-teal",
-    text: "text-dev-teal",
     bullets: ["Next.js App Router", "Design systems", "Commerce & portals"],
   },
   {
@@ -213,7 +210,6 @@ export const CAPABILITIES: Capability[] = [
     icon: Smartphone,
     fill: "bg-dev-azure",
     edge: "group-hover:border-dev-azure",
-    text: "text-dev-azure",
     bullets: ["React Native & Expo", "Offline-first sync", "Store releases"],
   },
   {
@@ -223,7 +219,6 @@ export const CAPABILITIES: Capability[] = [
     icon: Blocks,
     fill: "bg-dev-indigo",
     edge: "group-hover:border-dev-indigo",
-    text: "text-dev-indigo",
     bullets: ["Odoo ERP", "REST & webhook layers", "Data migration"],
   },
   {
@@ -233,7 +228,6 @@ export const CAPABILITIES: Capability[] = [
     icon: CloudCog,
     fill: "bg-dev-coral",
     edge: "group-hover:border-dev-coral",
-    text: "text-dev-coral",
     bullets: ["CI/CD pipelines", "Containers & IaC", "Monitoring & alerting"],
   },
   {
@@ -243,7 +237,6 @@ export const CAPABILITIES: Capability[] = [
     icon: BrainCircuit,
     fill: "bg-dev-pine",
     edge: "group-hover:border-dev-pine",
-    text: "text-dev-pine",
     bullets: ["Retrieval over your data", "Workflow automation", "Evaluations"],
   },
   {
@@ -253,7 +246,6 @@ export const CAPABILITIES: Capability[] = [
     icon: PenTool,
     fill: "bg-dev-violet",
     edge: "group-hover:border-dev-violet",
-    text: "text-dev-violet",
     bullets: ["Discovery & flows", "Component libraries", "Accessibility"],
   },
 ];
@@ -321,7 +313,7 @@ export const FRAMEWORKS: Framework[] = [
     icon: Database,
     fill: "bg-dev-teal",
     edge: "group-hover:border-dev-teal",
-    text: "text-dev-teal",
+    text: "text-dev-teal-deep",
   },
   {
     name: "PostgreSQL",
@@ -339,7 +331,7 @@ export const FRAMEWORKS: Framework[] = [
     icon: FileCode2,
     fill: "bg-sot-gold",
     edge: "group-hover:border-sot-gold",
-    text: "text-sot-gold-dark",
+    text: "text-sot-gold-deep",
   },
   {
     name: "Odoo",

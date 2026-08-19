@@ -7,6 +7,15 @@ import { ProcessSteps } from "@/components/landing/process-steps";
 import { StackMarquee } from "@/components/landing/stack-marquee";
 import { StatBand } from "@/components/landing/stat-band";
 import { WorkShowcase } from "@/components/landing/work-showcase";
+import { JsonLd } from "@/components/seo/json-ld";
+import {
+  faqPageNode,
+  graph,
+  organizationNode,
+  professionalServiceNode,
+  webPageNode,
+  webSiteNode,
+} from "@/lib/structured-data";
 
 /**
  * The landing page.
@@ -18,6 +27,21 @@ import { WorkShowcase } from "@/components/landing/work-showcase";
  */
 const HomePage = () => (
   <>
+    {/* One graph rather than six script tags, so the nodes can reference the
+        organisation by `@id` instead of each restating it. Every node is built
+        from the same constants the page renders — the commonest way structured
+        data goes wrong is not being invalid, it is quietly becoming a second,
+        stale copy of what the visitor is actually being shown. */}
+    <JsonLd
+      data={graph([
+        organizationNode(),
+        webSiteNode(),
+        webPageNode(),
+        professionalServiceNode(),
+        faqPageNode(),
+      ])}
+    />
+
     <Hero />
     <StatBand />
     <StackMarquee />

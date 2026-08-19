@@ -1,6 +1,13 @@
 import { SiteFooter } from "@/components/landing/site-footer";
 import { SiteHeader } from "@/components/landing/site-header";
 import { SITE_DESCRIPTION, SITE_NAME, SITE_TAGLINE } from "@/lib/landing";
+import {
+  OG_IMAGE_HEIGHT,
+  OG_IMAGE_PATH,
+  OG_IMAGE_WIDTH,
+  SITE_LOCALE,
+  SITE_URL,
+} from "@/lib/seo";
 import { Metadata, Viewport } from "next";
 import { Bricolage_Grotesque, JetBrains_Mono, Manrope } from "next/font/google";
 import "./globals.css";
@@ -34,27 +41,108 @@ const bricolage = Bricolage_Grotesque({
   display: "swap",
 });
 
+// Pinned to 400, and only 400. Every `font-medium` on this page sits on the
+// HEADING face, so the variable Manrope file was shipping an entire weight axis
+// to render one weight — about 22KiB of critical-path bandwidth bought nothing.
+// Bricolage stays variable, because there the axis is the point.
 const manrope = Manrope({
   subsets: ["latin"],
+  weight: ["400"],
   variable: "--font-manrope",
   display: "swap",
 });
 
+// NOT preloaded, unlike the other two. Preloading puts a font on the critical
+// path, and three of them is 105KiB of it — which on a throttled connection is
+// most of what stands between the request and the headline being painted.
+// JetBrains Mono sets the terminal and the tooling ticker: below the fold on a
+// phone, and mono text that arrives a moment late in a metrics-matched fallback
+// is the cheapest of the three to be patient about.
 const jetBrainsMono = JetBrains_Mono({
   subsets: ["latin"],
   variable: "--font-jetbrains-mono",
   display: "swap",
+  preload: false,
 });
 
+const TITLE = `${SITE_NAME} — ${SITE_TAGLINE}`;
+
 export const metadata: Metadata = {
-  title: `${SITE_NAME} — ${SITE_TAGLINE}`,
+  // Everything relative below — the canonical, the OG image, the Twitter card —
+  // is resolved against this. Without it Next emits relative URLs into tags
+  // that are only meaningful as absolute ones.
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: TITLE,
+    // There is one page today. The template is here so that the day a second
+    // one is added it inherits the brand suffix rather than shipping a bare
+    // title, which is the sort of thing nobody notices for a month.
+    template: `%s | ${SITE_NAME}`,
+  },
   description: SITE_DESCRIPTION,
+  applicationName: SITE_NAME,
+  authors: [{ name: "Smart of Things", url: "https://sot.com.sa" }],
+  creator: "Smart of Things",
+  publisher: "Smart of Things",
+  category: "technology",
+  keywords: [
+    "software development company Saudi Arabia",
+    "web development Riyadh",
+    "mobile app development KSA",
+    "Odoo ERP implementation Saudi Arabia",
+    "Next.js development agency",
+    "React Native development",
+    "custom software development Riyadh",
+    "DevOps and cloud consulting KSA",
+    "system integration Saudi Arabia",
+    "Smart of Things",
+  ],
+  alternates: {
+    canonical: "/",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      // Let Google use a full-size image and an unclipped snippet. The defaults
+      // are conservative, and a truncated description is a worse result than
+      // the one the page actually wrote.
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
   openGraph: {
-    title: `${SITE_NAME} — ${SITE_TAGLINE}`,
-    description: SITE_DESCRIPTION,
-    siteName: SITE_NAME,
-    locale: "en",
     type: "website",
+    url: SITE_URL,
+    siteName: SITE_NAME,
+    title: TITLE,
+    description: SITE_DESCRIPTION,
+    locale: SITE_LOCALE,
+    images: [
+      {
+        url: OG_IMAGE_PATH,
+        width: OG_IMAGE_WIDTH,
+        height: OG_IMAGE_HEIGHT,
+        alt: TITLE,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: TITLE,
+    description: SITE_DESCRIPTION,
+    images: [OG_IMAGE_PATH],
+  },
+  // The phone numbers on this page are already explicit `tel:` links. Leaving
+  // detection on lets iOS find them a second time and restyle them mid-sentence
+  // in its own blue, which is the one colour this page does not own.
+  formatDetection: {
+    telephone: false,
+    address: false,
+    email: false,
   },
 };
 

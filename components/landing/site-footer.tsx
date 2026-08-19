@@ -118,7 +118,7 @@ export const SiteFooter = () => (
     </div>
 
     <div className="border-t border-sot-hairline-dark">
-      <div className="font-sot mx-auto flex max-w-350 flex-col gap-2 px-4 py-6 text-sm text-white/40 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-10">
+      <div className="font-sot mx-auto flex max-w-350 flex-col gap-2 px-4 py-6 text-sm text-white/60 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-10">
         <p>{SITE_NAME} — part of Smart of Things. All rights reserved.</p>
         <p>Built in-house, in Riyadh.</p>
       </div>

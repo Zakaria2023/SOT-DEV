@@ -38,7 +38,7 @@ export const WorkCard = ({ item }: Props) => (
           <p className="font-sot-heading text-3xl leading-none tracking-tight text-white">
             {metric.value}
           </p>
-          <p className="font-sot mt-2 text-xs tracking-wide text-white/40">
+          <p className="font-sot mt-2 text-xs tracking-wide text-white/60">
             {metric.label}
           </p>
         </div>
