@@ -1,26 +1,243 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  /* ---- THE BRAND, LIFTED WHOLE FROM THE PUBLIC SOT SITE ----
+
+     Same gold, same ink, same sand, so the development arm and sot.com.sa
+     read as one company. Defined once and never redefined under a dark
+     variant: the mark is a gold `sot` over a dark-grey `smart of things`, and
+     on a dark surface the wordmark half simply disappears. The dark bands
+     further down this page are SECTIONS, not a theme — the logo never lands on
+     one without a white plate beneath it. */
+  --color-sot-gold: #b99253;
+  --color-sot-gold-dark: #a07c40;
+  --color-sot-ink: #2e2414;
+  --color-sot-night: #1b1610;
+  --color-sot-sand: #f5f3f0;
+  --color-sot-body: #4a4336;
+  --color-sot-slate: #495867;
+  --color-sot-hairline: #e6e1d9;
+  /* The hairline again, for the ink bands. A border that reads as a hairline
+     on sand is invisible on ink, so the dark sections get their own value
+     rather than a white border at some guessed opacity. */
+  --color-sot-hairline-dark: #3d3425;
+
+  /* ---- THE ENGINEERING PALETTE ----
+
+     Six flat colours, one per capability, so a card is identifiable by its
+     colour before its title is read. They are saturated rather than tinted —
+     this is the dev studio, and it is allowed to be louder than the parent
+     site — but every one is a FLAT fill. There is no gradient anywhere on this
+     page: colour separates surfaces, and a hairline separates the rest.
+
+     All six clear 4.5:1 against white, so each works as a plate under white
+     text and as text on sand. */
+  --color-dev-teal: #12857f;
+  --color-dev-azure: #1f6fd0;
+  --color-dev-indigo: #4f46b8;
+  --color-dev-violet: #7d4bc4;
+  --color-dev-coral: #c9451f;
+  --color-dev-pine: #2f7d4f;
+
+  /* Named animations, so components ask for `animate-marquee` rather than
+     carrying a timing function around in an arbitrary class. */
+  --animate-marquee: marquee 42s linear infinite;
+  --animate-marquee-reverse: marquee-reverse 54s linear infinite;
+  --animate-cell: cell 5s ease-in-out infinite;
+  --animate-float: float 7s ease-in-out infinite;
+  --animate-caret: caret 1.1s step-end infinite;
+  --animate-orbit: orbit 22s linear infinite;
+  --animate-orbit-reverse: orbit 34s linear infinite reverse;
+  --animate-ring: ring 3.4s ease-out infinite;
+  --animate-rise: rise 0.8s ease-out both;
+  --animate-sweep: sweep 2.6s ease-in-out infinite;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* next/font self-hosts these and puts the variables on <html> (see
+     app/layout.tsx). Lato for text and Roboto for headings are the public
+     site's two families; JetBrains Mono is this site's own, because half of
+     what it shows is code. */
+  --font-sot: var(--font-lato), sans-serif;
+  --font-sot-heading: var(--font-roboto), sans-serif;
+  --font-sot-mono: var(--font-jetbrains-mono), monospace;
+  --font-sans: var(--font-lato), sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* The list is rendered twice inside the track, so one loop is exactly half the
+   distance — that is what makes the seam invisible. */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
   }
 }
 
+@keyframes marquee-reverse {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* One cell of the hero lattice lighting up and going out again. Each cell gets
+   a delay computed from its index, so the field ripples without a single line
+   of JavaScript deciding which cell is next. */
+@keyframes cell {
+  0%,
+  70%,
+  100% {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  20%,
+  45% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-14px);
+  }
+}
+
+@keyframes caret {
+  0%,
+  50% {
+    opacity: 1;
+  }
+  51%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes orbit {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* A ring leaving a live badge. Ends transparent rather than fading the whole
+   element, so the dot underneath stays at full strength. */
+@keyframes ring {
+  0% {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(2.6);
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* The travelling tick on the process rail. */
+@keyframes sweep {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  15%,
+  85% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(var(--sweep-distance, 100px));
+    opacity: 0;
+  }
+}
+
+/* Scroll-reveal, driven by the `data-visible` attribute the Reveal component
+   sets from an IntersectionObserver. It lives here rather than in utility
+   classes because the hidden state has to exist before hydration — otherwise
+   the first paint shows every section already in place and the whole page
+   arrives at once. */
+[data-reveal] {
+  opacity: 0;
+  transition:
+    opacity 0.7s ease-out,
+    transform 0.7s ease-out;
+}
+
+[data-reveal="up"] {
+  transform: translateY(28px);
+}
+
+[data-reveal="left"] {
+  transform: translateX(-28px);
+}
+
+[data-reveal="right"] {
+  transform: translateX(28px);
+}
+
+[data-reveal="scale"] {
+  transform: scale(0.94);
+}
+
+[data-reveal][data-visible="true"] {
+  opacity: 1;
+  transform: none;
+}
+
+/* Everything above is decoration. Somebody who has asked their system to stop
+   moving things gets the page with all of it resolved — including the reveals,
+   which land at their visible state rather than never arriving. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+
+  /* The nav links jump to a section on this same page, and the header that
+     holds them is sticky. Without this the target band lands underneath it and
+     its heading is the one thing the visitor cannot see. Roughly the header's
+     own height plus a little air. */
+  scroll-padding-top: 6rem;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-sot-sand);
+  color: var(--color-sot-body);
+
+  /* The lattice, the marquees and the orbit rings all run wider than their
+     band by design. Each is clipped by its own section, so this is only a
+     backstop — but it has to be `clip` rather than `hidden`. `overflow: hidden`
+     on the body makes it a scroll container, and a scroll container between the
+     viewport and a `position: sticky` element is exactly what stops that
+     element sticking. `clip` cuts the overflow without creating one, so the
+     header still works. */
+  overflow-x: clip;
 }

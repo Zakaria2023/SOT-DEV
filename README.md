@@ -1,36 +1,71 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# SOT Dev — landing page
 
-## Getting Started
+The marketing landing page for **SOT Dev**, the software engineering studio
+inside [Smart of Things](https://sot.com.sa).
 
-First, run the development server:
+It is a front door and nothing else: one route, no database, no API, no auth.
+Every figure, list and card on the page is static data in `lib/landing.ts`.
+
+## Running it
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev     # http://localhost:3000
+npm run build   # production build
+npm run lint    # must pass before committing
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## What is on the page
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Band | Component | Surface |
+| --- | --- | --- |
+| Hero — headline, deploy terminal, hairline lattice | `hero.tsx` | sand |
+| Four counting statistics | `stat-band.tsx` | ink |
+| Tooling ticker, two rows | `stack-marquee.tsx` | white |
+| Six capabilities | `capability-grid.tsx` | sand |
+| Nine frameworks we build on | `framework-grid.tsx` | white |
+| Three shipped projects | `work-showcase.tsx` | ink |
+| Four-stage process | `process-steps.tsx` | sand |
+| Five questions | `faq-section.tsx` | white |
+| Closing call to action | `cta-band.tsx` | ink |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+No two neighbouring bands share a background, which is what separates the page
+into sections without a rule drawn between every one of them.
 
-## Learn More
+## Design constraints
 
-To learn more about Next.js, take a look at the following resources:
+The house rules live in [CLAUDE.md](CLAUDE.md) and are carried over from the SOT
+monorepo so the two properties are written the same way. The ones that shape how
+this page looks:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **No gradients anywhere.** Backgrounds and text are flat colour. Surfaces are
+  separated by a hairline border, never by a shadow.
+- **No font weight above medium.** Emphasis comes from size, colour and spacing.
+- **Colour comes from the tokens** in `app/globals.css` — `sot-*` for the brand,
+  `dev-*` for the six capability colours. Never a stock Tailwind palette colour.
+- **The logo only sits on a light surface.** The mark is a gold `sot` over a
+  dark-grey `smart of things`; on an ink band the wordmark half disappears, so
+  the footer puts it on a white plate.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Animation
 
-## Deploy on Vercel
+Motion is most of the point of this page, and almost none of it is JavaScript.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Keyframes live in `app/globals.css` and are exposed as `--animate-*` theme
+  tokens, so components ask for `animate-marquee` rather than carrying a
+  duration around in an arbitrary class.
+- The hero lattice is a **Server Component**: which cells light, in what colour
+  and after how long are all derived from each cell's index by arithmetic, so
+  the field looks random while being identical on the server and the client.
+- Scroll entrances go through `<Reveal>`, which drives CSS from a single
+  `IntersectionObserver` and plays once — a reveal that reverses means the page
+  dismantles itself behind the visitor.
+- Only four components are client components: the header, `Reveal`, the
+  counters and the terminal, plus the FAQ accordion.
+- Everything honours `prefers-reduced-motion`, including the terminal, which
+  checks the query by hand because a CSS media query cannot reach a JS timer.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Assets
+
+`public/sot-logo.webp` and `app/favicon.ico` are the marks from the SOT client
+app, copied in so this repository stands alone.
