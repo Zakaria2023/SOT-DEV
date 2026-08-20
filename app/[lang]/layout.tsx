@@ -20,10 +20,9 @@ import {
 import { Metadata, Viewport } from "next";
 import {
   Bricolage_Grotesque,
-  IBM_Plex_Sans_Arabic,
+  Cairo,
   JetBrains_Mono,
   Manrope,
-  Reem_Kufi,
 } from "next/font/google";
 import { notFound } from "next/navigation";
 import "../globals.css";
@@ -69,41 +68,24 @@ const jetBrainsMono = JetBrains_Mono({
   preload: false,
 });
 
-// ---- ARABIC GETS THE SAME ARCHITECTURE AS THE LATIN, NOT ONE GENERIC FAMILY ----
+// ARABIC. Neither Bricolage nor Manrope has a single Arabic glyph, so without
+// this the Arabic page would be set by whatever the operating system happened
+// to substitute — different on every device, and matched to nothing.
 //
-// Neither Bricolage nor Manrope has a single Arabic glyph, so without these the
-// Arabic page would be set by whatever the operating system happened to
-// substitute — different on every device, and matched to nothing.
+// Cairo carries both the headings and the body. It is the most widely used
+// Arabic screen face for a reason: it is unfussy, it holds up at 12px and at
+// 60px, and it is the face Saudi readers are most used to reading a business
+// page in. 400 and 500 only, which is the whole emphasis vocabulary here.
 //
-// This was Cairo, which works and is the reason every second Arabic site looks
-// like every other one. So the Arabic side now mirrors the English: a display
-// face with character for the headings, and a workhorse for the reading copy.
-//
-// Reem Kufi is a contemporary geometric Kufi — recognisably Arabic without
-// being calligraphic or ornamental, and it holds its shape at 60px, which is
-// what a hero headline actually needs. IBM Plex Sans Arabic carries the body:
-// it is the Arabic member of one of the most carefully drawn type systems
-// around, and its register is precise and technical, which is the register this
-// studio is writing in.
-//
-// Both sit BEHIND the Latin faces in the stack rather than replacing them (see
-// `globals.css`), so they are reached only for glyphs the Latin faces lack —
-// which is exactly the Arabic — and "Next.js" on the Arabic page still comes
-// out in Bricolage. Neither is preloaded: on the English page no Arabic glyph
-// is ever rendered, so neither file is ever fetched.
-const reemKufi = Reem_Kufi({
+// It sits BEHIND the Latin faces in the stack rather than replacing them (see
+// `globals.css`), so it is reached only for glyphs they lack — which is exactly
+// the Arabic — and "Next.js" on the Arabic page still comes out in Bricolage.
+// Not preloaded: on the English page no Arabic glyph is ever rendered, so the
+// file is never fetched.
+const cairo = Cairo({
   subsets: ["arabic"],
-  variable: "--font-reem-kufi",
-  display: "swap",
-  preload: false,
-});
-
-// Not a variable font, and 400 is all the body needs — every `font-medium` on
-// this page sits on the HEADING face, which is Reem Kufi's job.
-const plexArabic = IBM_Plex_Sans_Arabic({
-  subsets: ["arabic"],
-  weight: ["400"],
-  variable: "--font-plex-arabic",
+  weight: ["400", "500"],
+  variable: "--font-cairo",
   display: "swap",
   preload: false,
 });
@@ -112,8 +94,7 @@ const plexArabic = IBM_Plex_Sans_Arabic({
  * Both locales, prerendered at build. Derived from `LOCALES` rather than
  * written out again, so adding a language cannot leave a page unbuilt.
  */
-export const generateStaticParams = () =>
-  LOCALES.map((lang) => ({ lang }));
+export const generateStaticParams = () => LOCALES.map((lang) => ({ lang }));
 
 export const generateMetadata = async ({
   params,
@@ -218,7 +199,7 @@ const RootLayout = async ({ children, params }: LayoutProps<"/[lang]">) => {
       // written with logical properties — `ms`/`me`, `ps`/`pe`, `start`/`end` —
       // so this one attribute flips the layout rather than a second stylesheet.
       dir={direction(lang)}
-      className={`${manrope.variable} ${bricolage.variable} ${jetBrainsMono.variable} ${reemKufi.variable} ${plexArabic.variable} h-full antialiased`}
+      className={`${manrope.variable} ${bricolage.variable} ${jetBrainsMono.variable} ${cairo.variable} h-full antialiased`}
     >
       <body className="font-sot flex min-h-full flex-col">
         {/* Every scroll entrance on this page starts at `opacity: 0` and is

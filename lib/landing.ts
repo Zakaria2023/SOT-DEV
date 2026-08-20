@@ -31,13 +31,7 @@ import {
 
 export type NavId = "capabilities" | "frameworks" | "work" | "process" | "faq";
 
-export type CapabilityId =
-  | "web"
-  | "mobile"
-  | "erp"
-  | "cloud"
-  | "ai"
-  | "design";
+export type CapabilityId = "web" | "mobile" | "erp" | "cloud" | "ai" | "design";
 
 export type FrameworkId =
   | "next"
@@ -318,7 +312,7 @@ export const FRAMEWORKS: FrameworkEntry[] = [
  * has to parse its own output back out.
  */
 export const STATS: Stat[] = [
-  { id: "years", value: 20, suffix: "+" },
+  { id: "years", value: 5, suffix: "+" },
   { id: "products", value: 42, suffix: "" },
   { id: "releases", value: 1400, suffix: "+" },
   { id: "uptime", value: 99.9, suffix: "%" },

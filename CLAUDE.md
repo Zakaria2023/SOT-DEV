@@ -57,11 +57,10 @@ here — they have nothing to govern.
   active section as a hash (`/ar#frameworks`), which preserves the place in the
   argument rather than the number of pixels. Do not "fix" this by removing the
   hash or by adding `scroll={false}` — both bring the bug back.
-- Arabic type is **Reem Kufi for headings and IBM Plex Sans Arabic for body** —
-  the same display-plus-workhorse split the Latin side uses, not one family
-  doing both. Both sit _behind_ the Latin faces in the stack rather than
-  replacing them, so Latin product names on the Arabic page still render in the
-  faces they were chosen for, and the English page never fetches either.
+- Arabic type is **Cairo**, for headings and body alike. It sits _behind_ the
+  Latin faces in the stack rather than replacing them, so Latin product names on
+  the Arabic page still render in the faces they were chosen for, and the
+  English page never fetches it at all.
 - Arabic line-height is set once in `globals.css` under `[dir="rtl"]`, never as
   an `rtl:leading-*` on individual headings. `leading-none` is right for
   Bricolage and clips any Arabic face, and that is one fact about the script

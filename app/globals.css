@@ -92,21 +92,18 @@
      single component being touched — which is exactly what happened when Lato
      and Roboto were replaced.
 
-     THE ARABIC FACES SIT BEHIND THE LATIN ONES rather than replacing them on
-     the Arabic page. Neither Bricolage nor Manrope has a single Arabic glyph,
-     so a browser rendering Arabic walks the stack and reaches Reem Kufi or IBM
-     Plex Sans Arabic for exactly those characters — while "Next.js" and
-     "PostgreSQL", which appear on the Arabic page too, still come out in the
-     faces they were chosen for.
+     CAIRO SITS BEHIND THE LATIN FACES rather than replacing them on the Arabic
+     page. Neither Bricolage nor Manrope has a single Arabic glyph, so a browser
+     rendering Arabic walks the stack and reaches Cairo for exactly those
+     characters — while "Next.js" and "PostgreSQL", which appear on the Arabic
+     page too, still come out in the faces they were chosen for.
 
-     One stack rather than a per-language stylesheet, and the pairing is
-     deliberate: Reem Kufi answers Bricolage on the headings, Plex Arabic
-     answers Manrope on the body. On the English page neither is fetched,
-     because no glyph ever falls through to them. */
-  --font-sot: var(--font-manrope), var(--font-plex-arabic), sans-serif;
-  --font-sot-heading: var(--font-bricolage), var(--font-reem-kufi), sans-serif;
+     One stack, no per-language stylesheet, and on the English page Cairo is
+     never fetched because no glyph ever falls through to it. */
+  --font-sot: var(--font-manrope), var(--font-cairo), sans-serif;
+  --font-sot-heading: var(--font-bricolage), var(--font-cairo), sans-serif;
   --font-sot-mono: var(--font-jetbrains-mono), monospace;
-  --font-sans: var(--font-manrope), var(--font-plex-arabic), sans-serif;
+  --font-sans: var(--font-manrope), var(--font-cairo), sans-serif;
 }
 
 /* The list is rendered twice inside the track, so one loop is exactly half the

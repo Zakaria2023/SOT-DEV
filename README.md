@@ -35,9 +35,9 @@ blank on the page.
 
 Arabic sets `dir="rtl"` on `<html>`, and that one attribute mirrors the whole
 layout — every component is written with logical properties (`ms`/`me`,
-`ps`/`pe`, `start`/`end`) rather than `ml`/`pl`/`left`. The Arabic faces sit
-_behind_ the Latin ones in the stack rather than replacing them, so `Next.js` on
-the Arabic page still renders in Bricolage.
+`ps`/`pe`, `start`/`end`) rather than `ml`/`pl`/`left`. Cairo sits _behind_ the
+Latin faces in the stack rather than replacing them, so `Next.js` on the Arabic
+page still renders in Bricolage.
 
 Switching language keeps you in the section you were reading. `<Link>` does not
 scroll to the top — Next's documented default is to _maintain_ scroll position —
@@ -77,7 +77,7 @@ the two channels some people prefer.
 | Nine frameworks we build on                         | `framework-grid.tsx`  | white   |
 | Three shipped projects                              | `work-showcase.tsx`   | ink     |
 | Four-stage process                                  | `process-steps.tsx`   | sand    |
-| Five questions                                      | `faq-section.tsx`     | white   |
+| Four questions                                      | `faq-section.tsx`     | white   |
 | Closing call to action                              | `cta-band.tsx`        | ink     |
 
 No two neighbouring bands share a background, which is what separates the page
@@ -109,17 +109,12 @@ Four families, all self-hosted by `next/font`:
 - **Manrope** — reading copy. Open apertures, semi-geometric, warm enough to sit
   beside the gold without arguing with it.
 - **JetBrains Mono** — the terminal and the tooling ticker.
-- **Reem Kufi** — Arabic headlines. A contemporary geometric Kufi:
-  recognisably Arabic without being calligraphic, and it holds its shape at
-  60px, which is what a hero headline actually needs.
-- **IBM Plex Sans Arabic** — Arabic reading copy. Precise and technical, which
-  is the register this studio writes in.
+- **Cairo** — Arabic, headings and body alike. Unfussy, holds up at 12px and at
+  60px, and the face Saudi readers are most used to reading a business page in.
 
-The Arabic side deliberately mirrors the Latin one — a display face and a
-workhorse, not a single family doing both. It was Cairo, which works and is the
-reason every second Arabic site looks like every other one. Both Arabic faces
-sit behind the Latin ones in the stack, so they are reached only for glyphs the
-Latin faces lack; on the English page neither is ever fetched.
+Cairo sits behind the Latin faces in the stack rather than replacing them, so it
+is reached only for glyphs they lack — which is exactly the Arabic. On the
+English page it is never fetched.
 
 Bricolage is loaded as a variable font, because its optical-size axis is the
 reason it was chosen. Manrope is pinned to weight 400: every `font-medium` on

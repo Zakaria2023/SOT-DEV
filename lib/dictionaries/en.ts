@@ -51,15 +51,11 @@ export const en = {
     headlineAccent: "your operation.",
     description:
       "SOT Dev is the engineering studio inside Smart of Things. We design, build and then operate the web platforms, mobile apps and ERP integrations that businesses across the Kingdom run on every day.",
-    trust: [
-      "Riyadh, Saudi Arabia",
-      "You own the repository",
-      "20 years of SOT behind it",
-    ],
+    trust: ["Riyadh, Saudi Arabia", "More than 5 years building software"],
   },
 
   stats: {
-    years: "Years of SOT behind us",
+    years: "Years building software",
     products: "Products in production",
     releases: "Releases shipped",
     uptime: "Platform uptime",
@@ -252,12 +248,7 @@ export const en = {
     {
       question: "Do you work alongside our existing team?",
       answer:
-        "Often. We can take a project end to end, or embed two or three engineers alongside yours and hand the codebase over at the finish. Either way the repository, the pipeline and the infrastructure accounts are yours from the first commit.",
-    },
-    {
-      question: "Who owns the code?",
-      answer:
-        "You do, unconditionally, from day one. There is no licence to renew and no runtime we hold the keys to. If you decide to move the work in-house, you leave with a repository somebody else can pick up.",
+        "Often. We can take a project end to end, or embed two or three engineers alongside yours and hand the codebase over at the finish. Whichever it is, your engineers work in the same repository and the same pipeline we do rather than waiting on a delivery at the end.",
     },
     {
       question: "What happens after launch?",
