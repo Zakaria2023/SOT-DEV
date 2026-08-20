@@ -61,6 +61,17 @@ here — they have nothing to govern.
   Latin faces in the stack rather than replacing them, so Latin product names on
   the Arabic page still render in the faces they were chosen for, and the
   English page never fetches it at all.
+- **Never write the Arabic stack as `var(--font-manrope), var(--font-cairo)`.**
+  That variable expands to `"Manrope", "Manrope Fallback"`, and next/font's
+  generated fallback is `src: local(Arial)` with **no `unicode-range`** — so it
+  matches every character Manrope lacks, Arabic included. The browser stops
+  there and never reaches Cairo, and the page silently renders in whatever
+  Naskh the system links Arial to while the Cairo file loads perfectly and goes
+  unused. `globals.css` therefore re-declares the stack under `[dir="rtl"]`
+  naming the real families as literals, with Cairo immediately after them and no
+  Latin fallback in between. The English page keeps its metric-adjusted fallback,
+  which is why the fix is scoped to RTL rather than done by weakening it for
+  everybody.
 - Arabic line-height is set once in `globals.css` under `[dir="rtl"]`, never as
   an `rtl:leading-*` on individual headings. `leading-none` is right for
   Bricolage and clips any Arabic face, and that is one fact about the script

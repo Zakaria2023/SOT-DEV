@@ -298,6 +298,35 @@
   }
 }
 
+/* ---- WHY THE ARABIC PAGE NAMES ITS FONTS AGAIN ----
+
+   `--font-sot` resolves to `"Manrope", "Manrope Fallback", "Cairo", ...`, and
+   that middle entry is the bug. next/font emits a metric-adjusted local
+   fallback for every family — `Manrope Fallback`, `src: local(Arial)` — and it
+   carries NO unicode-range, so it matches every character Manrope itself does
+   not have. Arabic is not in Manrope, so the browser lands on Manrope Fallback,
+   renders the page in whatever Naskh the system links Arial to, and never
+   reaches Cairo further down the stack. The font was loading correctly the
+   whole time; nothing was ever asking for it.
+
+   So the RTL page names the real families directly and puts Cairo straight
+   after them, with no Latin fallback in between. Latin product names still come
+   out in Manrope and Bricolage, Arabic now actually gets Cairo, and the English
+   page is untouched — it still has the metric-adjusted fallback that keeps its
+   CLS at zero, which is exactly why the fix is scoped here rather than done by
+   weakening the fallback for everybody.
+
+   The family names are written as literals because `var(--font-manrope)` is
+   precisely what drags the broken fallback back in. They are the real Google
+   family names and next/font does not hash them. */
+[dir="rtl"] .font-sot {
+  font-family: "Manrope", "Cairo", sans-serif;
+}
+
+[dir="rtl"] .font-sot-heading {
+  font-family: "Bricolage Grotesque", "Cairo", sans-serif;
+}
+
 /* ---- ARABIC NEEDS MORE ROOM BETWEEN LINES THAN LATIN ----
 
    The headings are set `leading-none` and `leading-tight`, which is right for
