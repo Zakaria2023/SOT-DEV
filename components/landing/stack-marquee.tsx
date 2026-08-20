@@ -1,3 +1,4 @@
+import { StackRow } from "@/components/landing/stack-row";
 import { Dictionary } from "@/lib/dictionary";
 import { STACK_ROW_ONE, STACK_ROW_TWO } from "@/lib/landing";
 
@@ -8,52 +9,42 @@ type Props = {
 /**
  * The tooling ticker: two rows travelling in opposite directions.
  *
- * Each row's list is rendered twice inside its track and the keyframes move the
- * track by exactly half its width, which is why the loop has no seam. The
- * spacing is `me-4` on every item rather than `gap-4` on the track for that
- * same reason: a gap sits *between* items, so half the track width lands half a
- * gap short of one full copy and the row hops eight pixels every lap. A margin
- * belongs to the item, so half is exactly half. `me` rather than `mr`, so the
- * arithmetic still holds when the page is mirrored.
+ * The row itself lives in `stack-row.tsx`, which owns the repeat count, the
+ * spacing arithmetic and the reason the track is pinned left-to-right. Both rows
+ * were the same forty lines of markup twice over before that, which is two
+ * places to fix every time the geometry moves — and it moved twice.
  *
- * The second copy is hidden from assistive technology — it is the same words
- * again, and a screen reader would otherwise announce the whole toolchain
- * twice.
+ * `aria-label` is translated even though nothing inside the section is: a screen
+ * reader still has to say what the region is before reading a list of product
+ * names out of it.
  */
 export const StackMarquee = ({ dict }: Props) => (
   <section
     aria-label={dict.stackLabel}
+    // ---- THE WHOLE SECTION IS PINNED LEFT-TO-RIGHT ----
+    //
+    // Not one Arabic character appears inside it — it is a list of Latin
+    // product names — and on the Arabic page it was running out and leaving
+    // white space on the right.
+    //
+    // The reason is where a `w-max` track gets ANCHORED. Under `dir="rtl"` it
+    // pins its right edge to the container and overflows leftwards, so
+    // translating it further left walks the content off screen and empties the
+    // right-hand side. Under `ltr` it pins its left edge and overflows right,
+    // which is what the transform is written for.
+    //
+    // That anchoring is decided by the direction of the track's CONTAINER, not
+    // of the track itself, which is why this sits here rather than on the rows:
+    // a `dir` on the row governs the order of the items inside it and has no say
+    // in where the row itself is placed. Setting it here makes the geometry
+    // identical in both languages instead of maintaining a second set of
+    // mirrored keyframes for one decorative band.
+    dir="ltr"
     className="overflow-hidden border-y border-sot-hairline bg-white py-10"
   >
     <div className="flex flex-col gap-4">
-      <div className="flex w-max animate-marquee hover:[animation-play-state:paused]">
-        {[...STACK_ROW_ONE, ...STACK_ROW_ONE].map((tool, index) => (
-          <span
-            key={`${tool}-${index}`}
-            aria-hidden={index >= STACK_ROW_ONE.length}
-            // `dir="ltr"` because these are product names. Left in the Arabic
-            // page's RTL flow, a string like "Next.js" has its full stop
-            // repositioned by the bidi algorithm and renders as ".Next".
-            dir="ltr"
-            className="font-sot-mono me-4 rounded-lg border border-sot-hairline bg-sot-sand px-5 py-2.5 text-sm whitespace-nowrap text-sot-body"
-          >
-            {tool}
-          </span>
-        ))}
-      </div>
-
-      <div className="flex w-max animate-marquee-reverse hover:[animation-play-state:paused]">
-        {[...STACK_ROW_TWO, ...STACK_ROW_TWO].map((tool, index) => (
-          <span
-            key={`${tool}-${index}`}
-            aria-hidden={index >= STACK_ROW_TWO.length}
-            dir="ltr"
-            className="font-sot-mono me-4 rounded-lg border border-sot-hairline bg-sot-sand px-5 py-2.5 text-sm whitespace-nowrap text-sot-body"
-          >
-            {tool}
-          </span>
-        ))}
-      </div>
+      <StackRow tools={STACK_ROW_ONE} />
+      <StackRow tools={STACK_ROW_TWO} reverse />
     </div>
   </section>
 );

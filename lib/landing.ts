@@ -414,6 +414,7 @@ export const STACK_ROW_TWO: string[] = [
   "React Native",
   "Expo",
   "Odoo",
+  "Daftra",
   "Python",
   "Docker",
   "Kubernetes",

@@ -45,8 +45,8 @@ export const CtaBand = ({ dict }: Props) => (
     </div>
 
     <Reveal className="relative mx-auto max-w-3xl px-4 text-center sm:px-6">
-      <p className="font-sot flex items-center justify-center gap-3 text-xs tracking-widest text-sot-gold uppercase">
-        <span className="h-px w-10 bg-sot-gold" />
+      <p className="font-sot flex items-center justify-center gap-3 text-sm tracking-widest text-sot-gold uppercase sm:text-base">
+        <span className="h-px w-12 bg-sot-gold" />
         {dict.sections.cta.eyebrow}
       </p>
 

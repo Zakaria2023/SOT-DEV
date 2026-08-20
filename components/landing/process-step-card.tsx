@@ -29,7 +29,7 @@ export const ProcessStepCard = ({
   const Icon = style.icon;
 
   return (
-    <div className="group relative">
+    <div className="group relative flex h-full flex-col">
       <div
         className={`flex h-14 w-14 items-center justify-center rounded-full text-white transition-transform duration-300 group-hover:scale-110 ${style.fill}`}
       >
@@ -44,11 +44,18 @@ export const ProcessStepCard = ({
         {copy.title}
       </h3>
 
-      <p className="font-sot mt-3 text-base leading-relaxed text-sot-body">
+      <p className="font-sot mt-3 mb-6 text-base leading-relaxed text-sot-body">
         {copy.description}
       </p>
 
-      <p className="font-sot mt-5 border-t border-sot-hairline pt-4 text-sm text-sot-slate">
+      {/* `mt-auto` rather than `mt-5`, and it is the whole reason the card is a
+          full-height flex column. The four descriptions wrap to two, three,
+          three and two lines, so a fixed top margin put this rule at four
+          different heights across the row and the band read as ragged. Pushed
+          to the bottom of an equal-height card, the four rules line up
+          regardless of how the copy above them wraps — which also means it
+          survives translation, where the line counts differ again. */}
+      <p className="font-sot mt-auto border-t border-sot-hairline pt-4 text-sm text-sot-slate">
         {deliverableWord} {copy.deliverable}
       </p>
     </div>

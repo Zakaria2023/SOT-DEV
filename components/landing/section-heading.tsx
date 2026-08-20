@@ -30,12 +30,12 @@ export const SectionHeading = ({
   return (
     <Reveal className={align === "center" ? "text-center" : "text-start"}>
       <p
-        className={`font-sot flex items-center gap-3 text-xs tracking-widest uppercase ${gold} ${
+        className={`font-sot flex items-center gap-3 text-sm tracking-widest uppercase sm:text-base ${gold} ${
           align === "center" ? "justify-center" : ""
         }`}
       >
         <span
-          className={`h-px w-10 ${
+          className={`h-px w-12 ${
             tone === "dark" ? "bg-sot-gold" : "bg-sot-gold-deep"
           }`}
         />

@@ -106,20 +106,33 @@
   --font-sans: var(--font-manrope), var(--font-cairo), sans-serif;
 }
 
-/* The list is rendered twice inside the track, so one loop is exactly half the
-   distance — that is what makes the seam invisible. */
+/* ---- WHY THE SHIFT IS 25% AND NOT 50% ----
+
+   The track holds FOUR copies of the list (see `stack-row.tsx`, which owns the
+   count) and travels by exactly one of them, so it lands on an identical
+   pattern and the seam is invisible.
+
+   It used to hold two copies and travel by half. That is also seamless, and it
+   is also broken: at the end of the lap the only thing covering the viewport is
+   the single remaining copy, so as soon as one copy is narrower than the screen
+   the row runs out and leaves white space. Four copies moving by a quarter
+   leaves three copies to the right of the viewport at full shift, which is wider
+   than any display this will be read on.
+
+   The 25% here and the repeat count there are one decision in two files:
+   the shift must be 100/REPEATS or the loop jumps. */
 @keyframes marquee {
   from {
     transform: translateX(0);
   }
   to {
-    transform: translateX(-50%);
+    transform: translateX(-25%);
   }
 }
 
 @keyframes marquee-reverse {
   from {
-    transform: translateX(-50%);
+    transform: translateX(-25%);
   }
   to {
     transform: translateX(0);
@@ -325,6 +338,20 @@
 
 [dir="rtl"] .font-sot-heading {
   font-family: "Bricolage Grotesque", "Cairo", sans-serif;
+}
+
+/* ---- ARABIC TAKES NO LETTER-SPACING ----
+
+   `tracking-widest` is right for a small uppercase Latin eyebrow and actively
+   wrong for Arabic: the script is joined, and letter-spacing inserts a gap
+   between every pair of glyphs, prising apart connections that are part of how
+   the word is read. `uppercase` is simply inert here — Arabic has no case — but
+   the tracking is not inert, it is damage.
+
+   Reset for the whole RTL page rather than removed from the components, because
+   the components are shared and the Latin side wants it. */
+[dir="rtl"] :is(.tracking-widest, .tracking-wide, .tracking-tight) {
+  letter-spacing: normal;
 }
 
 /* ---- ARABIC NEEDS MORE ROOM BETWEEN LINES THAN LATIN ----

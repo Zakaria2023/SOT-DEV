@@ -24,7 +24,7 @@ export const ProcessSteps = ({ dict }: Props) => (
         />
 
         {PROCESS_ORDER.map((id, index) => (
-          <Reveal key={id} delay={index * 110}>
+          <Reveal key={id} delay={index * 110} className="h-full">
             <ProcessStepCard
               copy={dict.process[id]}
               style={PROCESS_STYLES[id]}
