@@ -23,9 +23,15 @@ const sitemap = (): MetadataRoute.Sitemap =>
     changeFrequency: "monthly",
     priority: locale === DEFAULT_LOCALE ? 1 : 0.9,
     alternates: {
-      languages: Object.fromEntries(
-        LOCALES.map((alternate) => [alternate, `${SITE_URL}/${alternate}`]),
-      ),
+      languages: {
+        ...Object.fromEntries(
+          LOCALES.map((alternate) => [alternate, `${SITE_URL}/${alternate}`]),
+        ),
+        // The head tags name an x-default and the sitemap has to agree with
+        // them. Without it the two halves of the same statement disagree about
+        // which URL an unmatched language should be sent to.
+        "x-default": `${SITE_URL}/${DEFAULT_LOCALE}`,
+      },
     },
   }));
 

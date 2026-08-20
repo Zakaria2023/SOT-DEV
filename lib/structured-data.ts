@@ -18,8 +18,9 @@ export type JsonLd = Record<string, unknown>;
  *
  * `@id` has NO locale in it, deliberately. There is one company, and the
  * English and Arabic pages must describe the same entity rather than two that a
- * crawler then has to guess are related. The `WebPage` and `WebSite` nodes are
- * per-locale and point at this one.
+ * crawler then has to guess are related. The same goes for `WebSite` and the
+ * `ProfessionalService`: one site, one business. Only `WebPage` and `FAQPage`
+ * are per-locale, because those genuinely are different documents.
  *
  * The head office only. The showroom and the wholesale branch are separate
  * places, not second addresses for this one, and listing three under a single
@@ -73,8 +74,8 @@ export const organizationNode = (dict: Dictionary): JsonLd => ({
 
 export const webSiteNode = (locale: Locale, dict: Dictionary): JsonLd => ({
   "@type": "WebSite",
-  "@id": `${SITE_URL}/${locale}#website`,
-  url: `${SITE_URL}/${locale}`,
+  "@id": `${SITE_URL}/#website`,
+  url: SITE_URL,
   name: SITE_NAME,
   description: dict.meta.description,
   inLanguage: htmlLang(locale),
@@ -94,10 +95,10 @@ export const professionalServiceNode = (
   dict: Dictionary,
 ): JsonLd => ({
   "@type": "ProfessionalService",
-  "@id": `${SITE_URL}/${locale}#studio`,
+  "@id": `${SITE_URL}/#studio`,
   name: SITE_NAME,
   description: dict.meta.description,
-  url: `${SITE_URL}/${locale}`,
+  url: SITE_URL,
   image: absoluteUrl("/sot-logo.webp"),
   parentOrganization: { "@id": `${SITE_URL}/#organization` },
   address: {
@@ -153,7 +154,7 @@ export const webPageNode = (locale: Locale, dict: Dictionary): JsonLd => ({
   url: `${SITE_URL}/${locale}`,
   name: `${SITE_NAME} — ${dict.meta.tagline}`,
   description: dict.meta.description,
-  isPartOf: { "@id": `${SITE_URL}/${locale}#website` },
+  isPartOf: { "@id": `${SITE_URL}/#website` },
   about: { "@id": `${SITE_URL}/#organization` },
   inLanguage: htmlLang(locale),
   primaryImageOfPage: absoluteUrl("/sot-logo.webp"),

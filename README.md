@@ -160,13 +160,21 @@ Motion is most of the point of this page, and almost none of it is JavaScript.
 
 The structured data is one `@graph` — Organization, WebSite, WebPage,
 ProfessionalService and FAQPage — so the nodes reference the organisation by
-`@id` instead of each restating it. Every node is **built from the same
+`@id` instead of each restating it. The site-level entities (Organization,
+WebSite, ProfessionalService) carry **no locale in their `@id`**: there is one
+company and one website, and the two language pages have to describe the same
+entity rather than two a crawler then has to guess are related. Only WebPage and
+FAQPage are per-locale, because those genuinely are different documents. Every node is **built from the same
 dictionary the page renders**, in both languages. The commonest way structured data goes wrong is
 not being invalid, it is quietly becoming a second, stale copy of what the
 visitor is actually shown.
 
-Set `NEXT_PUBLIC_SITE_URL` per environment. The fallback is the real public
-origin rather than a preview host, so a deployment that never got the variable
+The site is served at **https://dev.sot.com.sa**, and that one value feeds the
+canonical, the `hreflang` pair, `og:url`, the sitemap, the `Host` line in
+`robots.txt` and every `@id` in the structured data.
+
+Set `NEXT_PUBLIC_SITE_URL` per environment (see `.env.example`). The fallback is
+the real public origin rather than a preview host, so a deployment that never got the variable
 publishes a canonical that is merely _correct_ instead of nominating a staging
 hostname as the page's true home.
 
